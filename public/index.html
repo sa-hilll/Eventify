@@ -3,418 +3,650 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Eventify — Campus Event Management</title>
-<meta name="description" content="Discover, register, and manage campus events with Eventify.">
+<title>Eventify — Discover & Book Campus Events</title>
+<meta name="description" content="Discover, RSVP, and manage college and campus events in cinematic dark style.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg-canvas: #FAF9FE;
-  --surface: #FFFFFF;
-  --surface-subtle: #F4F3FA;
+  --bg-main: #0b0c10;
+  --bg-surface: #13141c;
+  --bg-card: #181924;
+  --bg-card-hover: #202232;
+  --bg-input: #1a1b26;
+  --bg-subtle: #242638;
   
-  /* Pastel Primary & Accents */
-  --primary: #7C3AED;
-  --primary-hover: #6D28D9;
-  --primary-light: #F3E8FF;
-  --primary-border: #DDD6FE;
+  --primary: #7c3aed;
+  --primary-hover: #6d28d9;
+  --primary-glow: rgba(124, 58, 237, 0.4);
+  --accent-pink: #ec4899;
+  --accent-orange: #f97316;
+  --accent-cyan: #06b6d4;
+  --accent-green: #10b981;
   
-  --pastel-rose: #FCE7F3;
-  --pastel-rose-text: #9D174D;
-  --pastel-rose-bd: #F9A8D4;
+  --tx-title: #ffffff;
+  --tx-body: #e2e8f0;
+  --tx-muted: #94a3b8;
+  --tx-subtle: #64748b;
   
-  --pastel-mint: #ECFDF5;
-  --pastel-mint-text: #047857;
-  --pastel-mint-bd: #6EE7B7;
-  
-  --pastel-sky: #EFF6FF;
-  --pastel-sky-text: #1D4ED8;
-  --pastel-sky-bd: #93C5FD;
-  
-  --pastel-amber: #FFF7ED;
-  --pastel-amber-text: #C2410C;
-  --pastel-amber-bd: #FDBA74;
-
-  --tx-main: #1E1B4B;
-  --tx-muted: #64748B;
-  --tx-subtle: #94A3B8;
-  
-  --bd-subtle: #E2E8F0;
-  --bd-strong: #CBD5E1;
+  --bd-card: rgba(255, 255, 255, 0.08);
+  --bd-focus: rgba(124, 58, 237, 0.6);
+  --bd-input: rgba(255, 255, 255, 0.12);
   
   --radius-xl: 18px;
-  --radius-lg: 12px;
-  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
   --radius-full: 9999px;
   
-  --shadow-sm: 0 2px 4px rgba(30, 27, 75, 0.03);
-  --shadow-md: 0 8px 24px -4px rgba(30, 27, 75, 0.06);
-  --shadow-hover: 0 16px 32px -6px rgba(124, 58, 237, 0.12);
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 25px -5px rgba(124, 58, 237, 0.4);
   
   --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  margin: 0;
-  font-family: var(--font-main);
-  background-color: var(--bg-canvas);
+  background-color: var(--bg-main);
   background-image: 
-    radial-gradient(at 15% 15%, rgba(167, 139, 250, 0.08) 0px, transparent 55%),
-    radial-gradient(at 85% 85%, rgba(244, 114, 182, 0.06) 0px, transparent 55%),
-    radial-gradient(at 50% 50%, rgba(110, 231, 183, 0.05) 0px, transparent 50%);
+    radial-gradient(circle at 10% 20%, rgba(124, 58, 237, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 40%);
   background-attachment: fixed;
-  color: var(--tx-main);
+  color: var(--tx-body);
+  font-family: var(--font-main);
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-heading);
-  letter-spacing: -0.02em;
-  color: var(--tx-main);
-  margin: 0;
+/* ── Typography & Base ── */
+h1, h2, h3, h4 { font-family: var(--font-heading); color: var(--tx-title); letter-spacing: -0.02em; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+
+/* ── SVG Icons Helper ── */
+.icon { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; }
+
+/* ── Navbar (Matching Moctale Header) ── */
+.top-nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 36px;
+  background: rgba(11, 12, 16, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--bd-card);
 }
-
-h1 { font-size: 26px; font-weight: 800; }
-h2 { font-size: 19px; font-weight: 700; }
-h3 { font-size: 16px; font-weight: 700; }
-
-.sub, .meta { color: var(--tx-muted); font-size: 13.5px; margin: 0; }
-.sub { font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
-
-.icon-svg {
-  display: inline-flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+.brand-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-heading); font-size: 22px; font-weight: 800;
+  color: #fff; letter-spacing: 0.05em; text-transform: uppercase;
 }
-
-/* ── Hero Banner with Pastel Gradient ── */
-.hero-banner {
-  background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 40%, #F472B6 100%);
-  border-radius: var(--radius-xl);
-  padding: 32px 36px;
-  color: #fff;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 28px;
-  box-shadow: 0 12px 32px -4px rgba(124, 58, 237, 0.22);
-}
-.hero-banner h1 { color: #fff; font-size: 30px; font-weight: 800; margin-bottom: 8px; }
-.hero-banner p { color: rgba(255,255,255,0.92); font-size: 14.5px; margin: 0; max-width: 580px; line-height: 1.5; }
-.hero-badges { display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
-.hero-pill {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
-  padding: 5px 12px;
-  border-radius: var(--radius-full);
-  font-size: 12px; font-weight: 600; color: #fff;
-  border: 1px solid rgba(255,255,255,0.3);
-  display: inline-flex; align-items: center; gap: 6px;
-}
-
-/* ── Auth Card ── */
-.auth-wrapper {
-  min-height: 100vh;
+.brand-icon {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-  background-image: radial-gradient(#CBD5E1 0.8px, transparent 0.8px);
-  background-size: 20px 20px;
-}
-.auth-card {
-  width: 100%; max-width: 420px;
-  background: var(--surface);
-  border-radius: var(--radius-xl);
-  padding: 36px 32px;
-  border: 1px solid var(--bd-subtle);
-  box-shadow: 0 20px 40px -10px rgba(30, 27, 75, 0.08);
-  position: relative;
-}
-.auth-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 5px;
-  background: linear-gradient(90deg, #7C3AED, #F472B6, #6EE7B7);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-}
-.logo-box {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-family: var(--font-heading); font-weight: 800; font-size: 22px;
-  color: var(--tx-main); margin-bottom: 24px;
-}
-.logo-icon {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, #7C3AED, #A78BFA);
-  color: #fff; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
 }
 
-.seg-control {
-  display: flex; background: var(--surface-subtle);
-  border-radius: var(--radius-lg); padding: 4px;
-  margin-bottom: 22px; border: 1px solid var(--bd-subtle);
+.nav-center-menu {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px 6px; border-radius: var(--radius-full);
+  border: 1px solid var(--bd-card);
 }
-.seg-control button {
-  flex: 1; border: 0; background: none; padding: 9px;
-  border-radius: var(--radius-md); cursor: pointer;
-  color: var(--tx-muted); font-family: inherit; font-size: 13.5px; font-weight: 600;
-  transition: all 0.2s ease;
+.nav-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: var(--radius-full);
+  font-size: 13.5px; font-weight: 600; color: var(--tx-muted);
+  cursor: pointer; transition: all 0.2s ease; border: 0; background: none;
+}
+.nav-item:hover { color: #fff; background: rgba(255, 255, 255, 0.06); }
+.nav-item.active {
+  background: #fff; color: #0b0c10; font-weight: 700;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+}
+.nav-item-icon-only {
+  width: 36px; height: 36px; border-radius: var(--radius-full);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--tx-muted); cursor: pointer; transition: all 0.2s ease;
+  position: relative; border: 0; background: none;
+}
+.nav-item-icon-only:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+.badge-count {
+  position: absolute; top: 3px; right: 3px;
+  background: #ef4444; color: #fff; font-size: 10px; font-weight: 800;
+  padding: 1px 5px; border-radius: 10px; border: 2px solid var(--bg-main);
+}
+
+.nav-right-actions {
+  display: flex; align-items: center; gap: 14px;
+}
+.user-pill {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg-card); border: 1px solid var(--bd-card);
+  padding: 5px 14px 5px 6px; border-radius: var(--radius-full);
+}
+.avatar-circle {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 12px; color: #fff;
+}
+.user-name { font-size: 13.5px; font-weight: 700; color: #fff; }
+.role-badge {
+  font-size: 10px; font-weight: 800; text-transform: uppercase;
+  background: rgba(124, 58, 237, 0.25); color: #c4b5fd;
+  padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.4);
+}
+
+/* ── Auth Split Screen (Matching Photo 1) ── */
+.auth-page {
+  display: grid; grid-template-columns: 1.1fr 0.9fr;
+  min-height: 100vh; background: #07070a;
+}
+@media (max-width: 960px) {
+  .auth-page { grid-template-columns: 1fr; }
+  .auth-gallery { display: none; }
+}
+.auth-gallery {
+  padding: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+  height: 100vh; overflow: hidden; position: relative;
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+.auth-gallery::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 60%, #07070a 100%);
+  pointer-events: none;
+}
+.poster-card-col { display: flex; flex-direction: column; gap: 18px; }
+.poster-card-col.col-offset { transform: translateY(-40px); }
+.poster-card-col.col-down { transform: translateY(30px); }
+.gallery-poster {
+  border-radius: var(--radius-lg); overflow: hidden;
+  height: 240px; background-size: cover; background-position: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+  position: relative; transition: transform 0.4s ease;
+}
+.gallery-poster:hover { transform: scale(1.03); }
+.gallery-poster::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8) 100%);
+}
+.gallery-poster-title {
+  position: absolute; bottom: 12px; left: 14px; right: 14px; z-index: 2;
+  font-size: 13px; font-weight: 700; color: #fff; text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+
+.auth-form-side {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 40px; position: relative; z-index: 10;
+}
+.auth-box {
+  width: 100%; max-width: 440px;
+  background: #ffffff; color: #111827;
+  border-radius: var(--radius-xl); padding: 40px 36px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(124, 58, 237, 0.15);
+}
+.auth-box h1 {
+  font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 6px;
+  text-align: center; font-family: var(--font-heading);
+}
+.auth-box .auth-subtitle {
+  font-size: 13.5px; color: #64748b; text-align: center; margin-bottom: 24px;
+}
+.auth-brand-head {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-heading); font-size: 20px; font-weight: 900;
+  color: #0f172a; letter-spacing: 0.05em; margin-bottom: 24px;
+}
+.auth-tabs {
+  display: flex; background: #f1f5f9; border-radius: var(--radius-md);
+  padding: 4px; margin-bottom: 22px; border: 1px solid #e2e8f0;
+}
+.auth-tab-btn {
+  flex: 1; padding: 9px; border: 0; background: none; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 700; color: #64748b; cursor: pointer; transition: all 0.2s ease;
   display: flex; align-items: center; justify-content: center; gap: 6px;
 }
-.seg-control button.on {
-  background: #fff; color: var(--primary);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+.auth-tab-btn.active {
+  background: #ffffff; color: #7c3aed; box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
 
-.form-group { margin-bottom: 16px; }
-label {
-  display: block; font-size: 12px; color: var(--tx-muted);
-  font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px;
+.form-field { margin-bottom: 16px; }
+.form-field label {
+  display: block; font-size: 12px; font-weight: 700; color: #475569;
+  margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.03em;
 }
-input, textarea {
-  width: 100%; padding: 10px 14px;
-  border: 1.5px solid var(--bd-subtle); border-radius: var(--radius-md);
-  font-family: inherit; font-size: 14px; color: var(--tx-main);
-  background: #fff; transition: all 0.2s ease;
+.input-wrap { position: relative; }
+.input-wrap input {
+  width: 100%; padding: 12px 14px; font-size: 14px; font-family: inherit;
+  border-radius: var(--radius-md); border: 1.5px solid #e2e8f0; background: #f8fafc;
+  color: #0f172a; transition: all 0.2s ease;
 }
-input:focus, textarea:focus {
+.input-wrap input:focus {
+  outline: none; border-color: #7c3aed; background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+}
+.pass-toggle-btn {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: 0; color: #94a3b8; cursor: pointer; padding: 4px; display: flex;
+}
+.pass-toggle-btn:hover { color: #475569; }
+
+.strength-bar-wrap { display: flex; gap: 4px; margin-top: 6px; margin-bottom: 4px; }
+.strength-seg { flex: 1; height: 3.5px; background: #e2e8f0; border-radius: 4px; transition: background 0.3s ease; }
+.strength-text { font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 12px; }
+
+.admin-code-callout {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md);
+  padding: 10px 12px; font-size: 12.5px; color: #1e40af; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px; font-weight: 600;
+}
+
+.submit-btn {
+  width: 100%; padding: 13px; border-radius: var(--radius-md); border: 0;
+  background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+  color: #ffffff; font-size: 14.5px; font-weight: 700; cursor: pointer;
+  transition: all 0.25s ease; box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px;
+}
+.submit-btn:hover {
+  background: linear-gradient(135deg, #6d28d9 0%, #4f46e5 100%);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45); transform: translateY(-1px);
+}
+.submit-btn:active { transform: translateY(0); }
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.auth-error {
+  color: #ef4444; font-size: 12.5px; font-weight: 600; min-height: 18px;
+  margin-top: 8px; text-align: center;
+}
+.auth-switch {
+  margin-top: 20px; font-size: 13.5px; color: #64748b; text-align: center;
+}
+.auth-switch button {
+  background: none; border: 0; color: #7c3aed; font-weight: 700;
+  cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* ── Main Layout (Explore & Events) ── */
+.app-container {
+  max-width: 1440px; margin: 0 auto; padding: 24px 36px 60px 36px;
+}
+.main-split-layout {
+  display: grid; grid-template-columns: 1fr 340px; gap: 32px; align-items: start;
+}
+@media (max-width: 1100px) {
+  .main-split-layout { grid-template-columns: 1fr; }
+}
+
+/* ── Category Chips & Search Bar ── */
+.search-filter-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+}
+.category-chips-list {
+  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none;
+}
+.category-chips-list::-webkit-scrollbar { display: none; }
+.cat-chip {
+  padding: 8px 18px; border-radius: var(--radius-full);
+  background: var(--bg-surface); border: 1px solid var(--bd-card);
+  color: var(--tx-muted); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s ease; white-space: nowrap;
+}
+.cat-chip:hover { color: #fff; background: var(--bg-card-hover); border-color: rgba(255,255,255,0.2); }
+.cat-chip.active {
+  background: #ffffff; color: #0b0c10; font-weight: 800; border-color: #ffffff;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25);
+}
+
+.search-input-pill {
+  position: relative; min-width: 280px;
+}
+.search-input-pill input {
+  width: 100%; padding: 9px 16px 9px 40px;
+  background: var(--bg-surface); border: 1px solid var(--bd-card);
+  border-radius: var(--radius-full); color: #fff; font-size: 13.5px;
+  transition: all 0.2s ease;
+}
+.search-input-pill input:focus {
   outline: none; border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25); background: var(--bg-card);
 }
-
-.callout-box {
-  background: var(--pastel-amber); border: 1px solid var(--pastel-amber-bd);
-  border-radius: var(--radius-md); padding: 10px 14px; font-size: 12.5px;
-  color: var(--pastel-amber-text); margin-bottom: 16px;
-  display: flex; align-items: center; gap: 8px; font-weight: 500;
-}
-
-/* ── Buttons with Pastel Gradient Touch ── */
-.btn {
-  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
-  color: #fff; border: 0; border-radius: var(--radius-md);
-  padding: 11px 18px; font-family: inherit; font-weight: 700; font-size: 13.5px;
-  cursor: pointer; width: 100%; transition: all 0.2s ease;
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
-}
-.btn:hover {
-  background: linear-gradient(135deg, #6D28D9 0%, #5B21B6 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.32);
-}
-.btn:active { transform: translateY(0.5px); }
-.btn:disabled {
-  background: var(--bd-strong); color: var(--tx-subtle);
-  cursor: not-allowed; transform: none; box-shadow: none;
-}
-.btn.ghost {
-  background: #fff; color: var(--tx-main);
-  border: 1.5px solid var(--bd-subtle); box-shadow: var(--shadow-sm);
-}
-.btn.ghost:hover {
-  background: var(--surface-subtle); border-color: var(--bd-strong);
-  color: var(--primary);
-}
-.btn.ghost.on {
-  background: var(--pastel-rose); color: var(--pastel-rose-text);
-  border-color: var(--pastel-rose-bd);
-}
-.btn.sm { width: auto; padding: 7px 14px; font-size: 12.5px; }
-.btn.danger {
-  background: #FEF2F2; color: #DC2626; border: 1.5px solid #FCA5A5; box-shadow: none;
-}
-.btn.danger:hover { background: #DC2626; color: #fff; border-color: #DC2626; }
-
-.link {
-  background: none; border: 0; color: var(--primary); cursor: pointer;
-  padding: 0; font-family: inherit; font-weight: 700;
-  text-decoration: underline; text-underline-offset: 3px;
-}
-.err {
-  color: #DC2626; font-size: 13px; min-height: 20px;
-  margin-bottom: 10px; font-weight: 600; display: flex; align-items: center; gap: 6px;
-}
-
-/* ── Header Nav ── */
-nav {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 32px; background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(12px); border-bottom: 1px solid var(--bd-subtle);
-  position: sticky; top: 0; z-index: 100;
-}
-.nav-brand {
-  font-family: var(--font-heading); font-weight: 800; font-size: 20px;
-  color: var(--tx-main); display: flex; align-items: center; gap: 8px;
-}
-.badge-role {
-  background: linear-gradient(135deg, var(--primary), #A78BFA);
-  color: #fff; font-size: 11px; font-weight: 700;
-  padding: 3px 10px; border-radius: var(--radius-full);
-  text-transform: uppercase; letter-spacing: 0.05em;
-}
-
-/* ── Layout & Admin Grid ── */
-.wrap { max-width: 1160px; margin: 32px auto; padding: 0 24px; }
-.admin { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
-@media(max-width: 860px) { .admin { grid-template-columns: 1fr; } }
-.panel {
-  background: var(--surface); border: 1px solid var(--bd-subtle);
-  border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-md);
-}
-.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-/* ── Filter Bar ── */
-.filter-bar {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
-}
-.search-box { position: relative; flex: 1; max-width: 320px; }
-.search-box input { padding-left: 38px; background: var(--surface); border-radius: var(--radius-full); }
-.search-icon {
+.search-input-pill .search-icon {
   position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-  color: var(--tx-subtle); pointer-events: none; display: flex;
-}
-.tag-filters { display: flex; gap: 6px; flex-wrap: wrap; }
-.filter-chip {
-  background: var(--surface); border: 1px solid var(--bd-subtle);
-  padding: 6px 14px; border-radius: var(--radius-full);
-  font-size: 12.5px; font-weight: 600; color: var(--tx-muted);
-  cursor: pointer; transition: all 0.2s ease;
-}
-.filter-chip:hover, .filter-chip.active {
-  background: var(--primary); color: #fff; border-color: var(--primary);
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.22);
+  color: var(--tx-subtle); pointer-events: none;
 }
 
-/* ── Cards with Pastel Accents & Gradients ── */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin-top: 16px; }
-.card {
-  background: var(--surface); border: 1px solid var(--bd-subtle);
-  border-radius: var(--radius-xl); overflow: hidden;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
+/* ── Poster Card Grid (Matching Image 2 Grid) ── */
+.section-heading-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; margin-top: 8px;
 }
-.card:hover {
-  box-shadow: var(--shadow-hover); transform: translateY(-3px);
-  border-color: rgba(124, 58, 237, 0.25);
+.section-title {
+  font-size: 19px; font-weight: 800; color: #ffffff;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-count {
+  font-size: 13px; font-weight: 600; color: var(--tx-muted);
 }
 
-.ban {
-  height: 150px;
-  background: linear-gradient(135deg, #A78BFA 0%, #F472B6 50%, #FDBA74 100%) center/cover;
-  position: relative;
+.posters-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 20px 18px; margin-bottom: 40px;
 }
-.hot-badge {
-  position: absolute; top: 12px; left: 12px;
-  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(6px);
-  color: #BE185D; font-size: 11px; font-weight: 800;
-  padding: 4px 10px; border-radius: var(--radius-full);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+@media (max-width: 600px) {
+  .posters-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+}
+
+.event-poster-card {
+  display: flex; flex-direction: column; cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.event-poster-card:hover {
+  transform: translateY(-6px);
+}
+.event-poster-art {
+  position: relative; width: 100%; aspect-ratio: 2/3;
+  border-radius: var(--radius-lg); overflow: hidden;
+  background: var(--bg-card); background-size: cover; background-position: center;
+  border: 1px solid var(--bd-card); box-shadow: var(--shadow-card);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.event-poster-card:hover .event-poster-art {
+  border-color: rgba(124, 58, 237, 0.6);
+  box-shadow: 0 12px 28px -6px rgba(124, 58, 237, 0.35);
+}
+
+.event-poster-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.9) 100%);
+  display: flex; flex-direction: column; justify-content: space-between; padding: 10px;
+}
+.card-top-tags {
+  display: flex; justify-content: space-between; align-items: center; gap: 4px;
+}
+.pill-badge {
+  font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: var(--radius-full);
+  backdrop-filter: blur(8px); text-transform: uppercase; letter-spacing: 0.04em;
+}
+.pill-badge.hot {
+  background: rgba(239, 68, 68, 0.9); color: #fff; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
+.pill-badge.seats {
+  background: rgba(15, 23, 42, 0.85); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15);
+}
+.pill-badge.full {
+  background: rgba(220, 38, 38, 0.85); color: #fff;
+}
+
+.card-bottom-actions {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+}
+.card-quick-btn {
+  flex: 1; padding: 7px 10px; border-radius: var(--radius-sm); border: 0;
+  background: #ffffff; color: #0b0c10; font-size: 11.5px; font-weight: 800;
+  cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 4px;
+}
+.card-quick-btn:hover { background: #7c3aed; color: #fff; }
+.card-quick-btn.booked {
+  background: #10b981; color: #fff; cursor: default;
+}
+.card-star-btn {
+  width: 32px; height: 32px; border-radius: var(--radius-sm); border: 0;
+  background: rgba(255, 255, 255, 0.15); color: #fff; backdrop-filter: blur(8px);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease;
+}
+.card-star-btn:hover { background: rgba(255, 255, 255, 0.3); }
+.card-star-btn.active { background: #f59e0b; color: #0b0c10; }
+
+.event-info-box { padding: 10px 2px 2px 2px; }
+.event-name {
+  font-size: 14.5px; font-weight: 700; color: #ffffff; line-height: 1.3;
+  margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.event-sub-meta {
+  font-size: 12px; color: var(--tx-muted); display: flex; align-items: center; gap: 6px;
+}
+
+/* ── Right Sidebar ── */
+.sidebar-panel {
+  display: flex; flex-direction: column; gap: 24px;
+}
+
+/* Promo Banner (District Promo Style) */
+.promo-banner-card {
+  position: relative; border-radius: var(--radius-xl); overflow: hidden;
+  background: linear-gradient(135deg, #1e1136 0%, #2e0854 50%, #150628 100%);
+  border: 1px solid rgba(168, 85, 247, 0.3); padding: 24px 20px;
+  box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.promo-banner-card::before {
+  content: ''; position: absolute; -webkit-mask-image: radial-gradient(circle, black 30%, transparent 70%);
+  top: -20px; right: -20px; width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.4), transparent 70%);
+}
+.promo-brand-tag {
+  font-family: var(--font-heading); font-size: 14px; font-weight: 800;
+  letter-spacing: 0.1em; color: #e9d5ff; text-transform: uppercase;
+  margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.promo-title {
+  font-size: 22px; font-weight: 900; color: #ffffff; line-height: 1.2;
+  margin-bottom: 4px;
+}
+.promo-code-pill {
+  font-size: 12px; font-weight: 800; color: #a855f7;
+  letter-spacing: 0.08em; margin-bottom: 16px;
+}
+.promo-actions-row {
+  display: flex; width: 100%; gap: 8px;
+}
+.code-chip {
+  flex: 1; background: rgba(0, 0, 0, 0.5); border: 1px dashed rgba(255, 255, 255, 0.3);
+  padding: 8px 10px; border-radius: var(--radius-md); font-size: 11.5px; font-weight: 700;
+  color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px;
+}
+.promo-book-btn {
+  flex: 1; background: linear-gradient(135deg, #7c3aed, #9333ea);
+  border: 0; padding: 8px 12px; border-radius: var(--radius-md);
+  font-size: 12px; font-weight: 800; color: #fff; cursor: pointer;
+  transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 4px;
+}
+.promo-book-btn:hover { background: linear-gradient(135deg, #6d28d9, #7e22ce); }
+
+/* Leaderboard Sidebar List (Matching Photo 2 "Most Interested") */
+.leaderboard-card {
+  background: var(--bg-surface); border: 1px solid var(--bd-card);
+  border-radius: var(--radius-xl); padding: 20px;
+}
+.leaderboard-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+}
+.leaderboard-title {
+  font-size: 16px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px;
+}
+.timeframe-pill {
+  font-size: 11px; font-weight: 700; color: var(--tx-muted);
+  background: var(--bg-card); padding: 4px 10px; border-radius: var(--radius-full);
+  border: 1px solid var(--bd-card);
+}
+
+.leaderboard-list { display: flex; flex-direction: column; gap: 14px; }
+.leaderboard-item {
+  display: flex; align-items: center; gap: 12px; padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.leaderboard-item:last-child { border-bottom: none; }
+.rank-num {
+  font-family: var(--font-heading); font-size: 32px; font-weight: 900;
+  color: #334155; line-height: 1; width: 28px; text-align: center;
+}
+.rank-num.rank-1 { color: #f59e0b; }
+.rank-num.rank-2 { color: #94a3b8; }
+.rank-num.rank-3 { color: #b45309; }
+
+.rank-thumb {
+  width: 44px; height: 60px; border-radius: var(--radius-sm);
+  background-size: cover; background-position: center; flex-shrink: 0;
+  border: 1px solid var(--bd-card);
+}
+.rank-meta { flex: 1; min-width: 0; }
+.rank-name {
+  font-size: 13px; font-weight: 700; color: #fff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px;
+}
+.rank-date { font-size: 11px; color: var(--tx-muted); margin-bottom: 4px; }
+.rank-hype {
+  font-size: 11px; font-weight: 800; color: #fb923c;
   display: flex; align-items: center; gap: 4px;
 }
-.seats-tag {
-  position: absolute; bottom: 12px; right: 12px;
-  background: rgba(30, 27, 75, 0.85); backdrop-filter: blur(6px);
-  color: #fff; font-size: 11px; font-weight: 700;
-  padding: 4px 10px; border-radius: var(--radius-md);
+
+/* ── Modal & Drawer (For Admin & Event Details) ── */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-window {
+  background: #151622; border: 1px solid var(--bd-card);
+  border-radius: var(--radius-xl); width: 100%; max-width: 520px;
+  max-height: 90vh; overflow-y: auto; padding: 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(124, 58, 237, 0.2);
+  color: #fff; position: relative;
+}
+.modal-close-btn {
+  position: absolute; top: 20px; right: 20px;
+  background: var(--bg-card); border: 1px solid var(--bd-card);
+  color: var(--tx-muted); width: 32px; height: 32px; border-radius: 50%;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease;
+}
+.modal-close-btn:hover { color: #fff; background: var(--bg-card-hover); }
+
+/* Admin Publish Form Styles */
+.dark-input {
+  width: 100%; padding: 11px 14px; background: var(--bg-input);
+  border: 1.5px solid var(--bd-input); border-radius: var(--radius-md);
+  color: #fff; font-family: inherit; font-size: 13.5px; transition: all 0.2s ease;
+}
+.dark-input:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25);
+}
+.tag-input-row {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+}
+.chip-tag {
+  background: rgba(124, 58, 237, 0.2); border: 1px solid rgba(124, 58, 237, 0.4);
+  color: #c4b5fd; font-size: 11.5px; font-weight: 700; padding: 4px 10px;
+  border-radius: var(--radius-full); display: flex; align-items: center; gap: 6px;
+}
+.chip-tag b { cursor: pointer; opacity: 0.7; }
+.chip-tag b:hover { opacity: 1; }
+
+.preset-posters-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px;
+}
+.preset-poster-thumb {
+  height: 60px; border-radius: var(--radius-sm); border: 2px solid transparent;
+  background-size: cover; background-position: center; cursor: pointer; transition: all 0.2s ease;
+}
+.preset-poster-thumb:hover, .preset-poster-thumb.selected {
+  border-color: var(--primary); transform: scale(1.04);
 }
 
-.card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-
-/* Pastel Tags */
-.tag-container { margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
-.tag {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 11.5px; font-weight: 700; padding: 4px 10px;
-  border-radius: var(--radius-md);
-}
-.t0 { background: var(--pastel-rose); color: var(--pastel-rose-text); border: 1px solid var(--pastel-rose-bd); }
-.t1 { background: var(--pastel-mint); color: var(--pastel-mint-text); border: 1px solid var(--pastel-mint-bd); }
-.t2 { background: var(--pastel-sky); color: var(--pastel-sky-text); border: 1px solid var(--pastel-sky-bd); }
-.t3 { background: var(--pastel-amber); color: var(--pastel-amber-text); border: 1px solid var(--pastel-amber-bd); }
-.tag b { cursor: pointer; margin-left: 4px; font-weight: 600; opacity: 0.7; }
-.tag b:hover { opacity: 1; }
-
-.event-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; line-height: 1.35; }
-.event-meta { display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--tx-muted); margin-bottom: 12px; }
-.event-meta span { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; }
-.event-desc { font-size: 13.5px; color: var(--tx-muted); line-height: 1.55; margin-bottom: 16px; flex: 1; }
-
-.bar-wrap { margin-top: auto; padding-top: 8px; }
-.bar-info { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--tx-muted); margin-bottom: 6px; }
-.bar { height: 7px; background: var(--surface-subtle); border-radius: var(--radius-full); overflow: hidden; }
-.bar i {
-  display: block; height: 100%;
-  background: linear-gradient(90deg, #7C3AED, #F472B6);
-  border-radius: var(--radius-full); transition: width 0.5s ease;
-}
-
-.row { display: flex; gap: 10px; margin-top: 16px; }
-
-details {
-  margin-top: 14px; background: var(--surface-subtle);
-  border-radius: var(--radius-md); padding: 10px 14px; font-size: 13px;
-}
-summary { cursor: pointer; color: var(--primary); font-weight: 700; user-select: none; display: flex; align-items: center; gap: 6px; }
-details p { margin: 6px 0; color: var(--tx-main); font-size: 12.5px; display: flex; justify-content: space-between; }
-
-/* ── Toast ── */
-.toast {
-  position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
-  background: var(--tx-main); color: #fff;
-  padding: 10px 20px; border-radius: var(--radius-full);
+/* Toast */
+.toast-notice {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+  background: #1e1b4b; border: 1px solid #6366f1; color: #fff;
+  padding: 12px 24px; border-radius: var(--radius-full);
   z-index: 1000; font-size: 13.5px; font-weight: 700;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  display: flex; align-items: center; gap: 8px;
-  animation: slideDown 0.3s ease;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(99, 102, 241, 0.4);
+  display: flex; align-items: center; gap: 10px;
+  animation: popUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.toast.bad { background: #DC2626; }
-@keyframes slideDown {
-  from { opacity: 0; transform: translateX(-50%) translateY(-15px); }
+.toast-notice.err { background: #450a0a; border-color: #ef4444; box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(239, 68, 68, 0.4); }
+@keyframes popUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 </style>
 </head>
 <body>
 <div id="app"></div>
+
 <script>
-/* ── Clean SVG Icon Registry ── */
+/* ── SVG Icons ── */
 var icons = {
-  ticket: '<svg class="icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg>',
-  user: '<svg class="icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
-  shield: '<svg class="icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
-  calendar: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
-  clock: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-  flame: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3.5z"/></svg>',
-  star: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
-  starFill: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
-  search: '<svg class="icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
-  trash: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
-  check: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
-  plus: '<svg class="icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
-  info: '<svg class="icon-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
-  users: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-3-3.87"/><path d="M9 21v-2a4 4 0 0 1 3-3.87"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><circle cx="16" cy="3.13" r="3"/></svg>',
-  logout: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>'
+  logo: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="12" r="5"/><circle cx="17" cy="12" r="5"/><path d="M12 7v10"/></svg>',
+  compass: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
+  calendar: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  bookmark: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+  grid: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+  bell: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+  search: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+  star: '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  fire: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3.5z"/></svg>',
+  check: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  plus: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  trash: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  eye: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+  ticket: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg>',
+  logout: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
+  user: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  users: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-3-3.87"/><path d="M9 21v-2a4 4 0 0 1 3-3.87"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><circle cx="16" cy="3.13" r="3"/></svg>',
+  close: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
 };
 
-/* ── Helpers ── */
+/* ── Cinematic Default Posters ── */
+var DEFAULT_POSTERS = [
+  'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=600&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1511578314322-379afb476865?w=600&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&auto=format&fit=crop&q=80'
+];
+
+var GALLERY_POSTERS = [
+  { title: 'The Dark Knight', img: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&auto=format&fit=crop&q=80' },
+  { title: 'Avengers Tech Fest', img: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&auto=format&fit=crop&q=80' },
+  { title: 'Cyberpunk Hackathon', img: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&auto=format&fit=crop&q=80' },
+  { title: 'Winter Gala', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=80' },
+  { title: 'Campus Music Night', img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&auto=format&fit=crop&q=80' },
+  { title: 'AI & Robotics Expo', img: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=500&auto=format&fit=crop&q=80' }
+];
+
+/* ── App State ── */
 function $(s){ return document.querySelector(s); }
-function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';'); }
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, function(c){ return '&#' + c.charCodeAt(0) + ';'; }); }
 
-/* ── State ── */
-var token        = localStorage.t;
-var me           = JSON.parse(localStorage.me || 'null');
-var mode         = 'login';
-var role         = 'student';
-var tags         = [];
-var banner       = '';
-var searchQuery  = '';
-var filterTag    = 'ALL';
+var token = localStorage.t;
+var me = JSON.parse(localStorage.me || 'null');
+var authMode = 'login'; // 'login' | 'register'
+var authRole = 'student'; // 'student' | 'admin'
+var showPass = false;
+
+var activeNav = 'explore';
+var filterTag = 'ALL';
+var searchQuery = '';
 var cachedEvents = [];
+var showAdminModal = false;
+var activeDetailEvent = null;
 
-/* ── API ── */
+// Admin event creation form state
+var newTags = [];
+var newBanner = '';
+
+/* ── API Client ── */
 async function api(p, m, b) {
   m = m || 'GET';
   var r = await fetch('/api' + p, {
@@ -423,299 +655,488 @@ async function api(p, m, b) {
     body: b ? JSON.stringify(b) : undefined
   });
   var d = await r.json().catch(function(){ return {}; });
-  if (!r.ok) { if (r.status === 401 && token) logout(); throw new Error(d.error || 'Something went wrong'); }
+  if (!r.ok) {
+    if (r.status === 401 && token) logout();
+    throw new Error(d.error || 'Something went wrong');
+  }
   return d;
 }
 
-function toast(m, bad) {
+function toast(msg, isErr) {
   var t = document.createElement('div');
-  t.className = 'toast' + (bad ? ' bad' : '');
-  t.innerHTML = (bad ? icons.info : icons.check) + ' ' + esc(m);
-  document.body.append(t);
-  setTimeout(function(){ t.remove(); }, 2800);
+  t.className = 'toast-notice' + (isErr ? ' err' : '');
+  t.innerHTML = (isErr ? icons.close : icons.check) + ' ' + esc(msg);
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 3000);
 }
 
-function logout() { localStorage.clear(); token = me = null; show(); }
-function show()   { me ? dash() : authView(); }
-
-function setRole(r) { role = r; authView(); }
-function setMode(m) { mode = m; authView(); }
-
-/* ── Auth view ── */
-function authView() {
-  var reg = mode === 'register';
-  $('#app').innerHTML =
-    '<div class="auth-wrapper">' +
-      '<main class="auth-card">' +
-        '<div class="logo-box"><span class="logo-icon">' + icons.ticket + '</span> Eventify</div>' +
-        '<h1>' + (reg ? 'Create Account' : 'Welcome Back') + '</h1>' +
-        '<p class="sub">' + (reg ? 'Select your role and get started.' : 'Log in to view upcoming campus events.') + '</p>' +
-        '<div class="seg-control">' +
-          ['student', 'admin'].map(function(r) {
-            return '<button type="button" id="role-' + r + '" class="' + (r === role ? 'on' : '') +
-                   '" onclick="setRole(\'' + r + '\')">' + (r === 'student' ? icons.user + ' Student' : icons.shield + ' Admin') + '</button>';
-          }).join('') +
-        '</div>' +
-        '<form onsubmit="sub(event)">' +
-          (reg ? '<div class="form-group"><label>Full Name</label><input name="fullname" placeholder="Alex Morgan" required></div>' : '') +
-          '<div class="form-group"><label>Email Address</label><input name="email" type="email" placeholder="alex@campus.edu" required></div>' +
-          '<div class="form-group"><label>Password</label><input name="password" type="password" placeholder="••••••••" minlength="6" required></div>' +
-          (reg && role === 'admin' 
-            ? '<div class="callout-box">' + icons.info + ' Enter admin authorization code to proceed.</div>' +
-              '<div class="form-group"><label>Admin Code</label><input name="adminCode" placeholder="e.g. ADMIN123" required></div>' 
-            : '') +
-          '<div class="err" id="err"></div>' +
-          '<button class="btn" id="auth-submit">' + (reg ? 'Create Account' : 'Log In') + '</button>' +
-        '</form>' +
-        '<p class="meta" style="margin-top:20px;text-align:center">' +
-          (reg ? 'Already registered?' : 'New to Eventify?') + ' ' +
-          '<button class="link" onclick="setMode(\'' + (reg ? 'login' : 'register') + '\')">' +
-            (reg ? 'Log in' : 'Create account') +
-          '</button>' +
-        '</p>' +
-      '</main>' +
-    '</div>';
+function logout() {
+  localStorage.clear();
+  token = me = null;
+  render();
 }
 
-async function sub(ev) {
-  ev.preventDefault();
-  var f = ev.target.elements;
-  function v(n){ return f[n] ? f[n].value : ''; }
-  var btn = $('#auth-submit');
-  btn.disabled = true; btn.textContent = 'Authenticating…';
-  try {
-    var r = await fetch('/api/' + mode, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fullname: v('fullname'), email: v('email'), password: v('password'), adminCode: v('adminCode'), role: role })
-    });
-    var d = await r.json();
-    if (!r.ok) throw new Error(d.error);
-    token = d.token; me = d.user;
-    localStorage.t = token; localStorage.me = JSON.stringify(me);
-    show();
-  } catch(x) {
-    $('#err').textContent = x.message;
-    btn.disabled = false; btn.textContent = mode === 'register' ? 'Create Account' : 'Log In';
+/* ── Route Dispatcher ── */
+function render() {
+  if (!me) {
+    renderAuth();
+  } else {
+    renderMain();
   }
 }
 
-/* ── Dashboards ── */
-function dash() {
-  var a = me.role === 'admin';
+/* ── Auth Screen (Matching Image 1) ── */
+function renderAuth() {
+  var reg = authMode === 'register';
+  var col1 = [GALLERY_POSTERS[0], GALLERY_POSTERS[3]];
+  var col2 = [GALLERY_POSTERS[1], GALLERY_POSTERS[4]];
+  var col3 = [GALLERY_POSTERS[2], GALLERY_POSTERS[5]];
+
   $('#app').innerHTML =
-    '<nav>' +
-      '<span class="nav-brand"><span class="logo-icon" style="width:30px;height:30px">' + icons.ticket + '</span> Eventify</span>' +
-      '<div style="display:flex;align-items:center;gap:12px">' +
-        '<span class="badge-role">' + me.role + '</span>' +
-        '<span style="font-weight:700;font-size:13.5px;color:var(--tx-main)">' + esc(me.name) + '</span>' +
-        '<button class="btn ghost sm" onclick="logout()">' + icons.logout + ' Logout</button>' +
+    '<div class="auth-page">' +
+      '<div class="auth-gallery">' +
+        '<div class="poster-card-col">' +
+          col1.map(function(p){ return '<div class="gallery-poster" style="background-image:url(\'' + p.img + '\')"><span class="gallery-poster-title">' + p.title + '</span></div>'; }).join('') +
+        '</div>' +
+        '<div class="poster-card-col col-offset">' +
+          col2.map(function(p){ return '<div class="gallery-poster" style="background-image:url(\'' + p.img + '\')"><span class="gallery-poster-title">' + p.title + '</span></div>'; }).join('') +
+        '</div>' +
+        '<div class="poster-card-col col-down">' +
+          col3.map(function(p){ return '<div class="gallery-poster" style="background-image:url(\'' + p.img + '\')"><span class="gallery-poster-title">' + p.title + '</span></div>'; }).join('') +
+        '</div>' +
       '</div>' +
-    '</nav>' +
-    '<div class="wrap">' +
-      (a
-        ? '<div class="admin">' +
-            '<form class="panel" onsubmit="mk(event)">' +
-              '<h2>Publish Event</h2>' +
-              '<p class="sub" style="margin-bottom:16px">Create and broadcast an event to all campus students.</p>' +
-              '<div class="form-group"><label>Event Title</label><input name="title" placeholder="e.g. Annual Tech Symposium" required></div>' +
-              '<div class="two">' +
-                '<div class="form-group"><label>Date</label><input name="date" type="date" required></div>' +
-                '<div class="form-group"><label>Time</label><input name="time" type="time" required></div>' +
-              '</div>' +
-              '<div class="form-group"><label>Seats Limit</label><input name="seats" type="number" min="1" placeholder="50" required></div>' +
-              '<div class="form-group"><label>Description</label><textarea name="description" rows="3" placeholder="Provide event details..."></textarea></div>' +
-              '<div class="form-group"><label>Tags (Press Enter)</label>' +
-              '<input id="ti" onkeydown="tk(event)" placeholder="e.g. Workshop, Tech, Free">' +
-              '<div id="tg" class="tag-container" style="margin-top:8px"></div></div>' +
-              '<div class="form-group"><label>Banner Poster</label><input type="file" accept="image/*" onchange="pick(this.files[0])"></div>' +
-              '<button type="submit" id="pub-btn" class="btn" style="margin-top:10px">' + icons.plus + ' Publish Event</button>' +
-            '</form>' +
-            '<div>' +
-              '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">' +
-                '<h2>Manage Events</h2>' +
-                '<p class="sub" id="stat" style="margin:0;font-weight:600"></p>' +
-              '</div>' +
-              '<div class="grid" id="list"></div>' +
-            '</div>' +
-          '</div>'
-        : '<div class="hero-banner">' +
-            '<h1>Campus Events & Activities</h1>' +
-            '<p>Discover workshops, seminars, competitions, and gatherings happening around your campus.</p>' +
-            '<div class="hero-badges">' +
-              '<span class="hero-pill">' + icons.check + ' Instant Registration</span>' +
-              '<span class="hero-pill">' + icons.users + ' Open to All Students</span>' +
-            '</div>' +
+      '<div class="auth-form-side">' +
+        '<div class="auth-brand-head">' +
+          '<span class="brand-icon" style="width:28px;height:28px;border-radius:7px">' + icons.logo + '</span> EVENTIFY' +
+        '</div>' +
+        '<div class="auth-box">' +
+          '<h1>' + (reg ? 'Create Account' : 'Welcome Back') + '</h1>' +
+          '<p class="auth-subtitle">' + (reg ? 'Sign up to discover and attend campus events.' : 'Enter your credentials to access campus activities.') + '</p>' +
+          '<div class="auth-tabs">' +
+            '<button type="button" class="auth-tab-btn ' + (authRole === 'student' ? 'active' : '') + '" onclick="setAuthRole(\'student\')">' + icons.user + ' Student</button>' +
+            '<button type="button" class="auth-tab-btn ' + (authRole === 'admin' ? 'active' : '') + '" onclick="setAuthRole(\'admin\')">' + icons.logo + ' Admin</button>' +
           '</div>' +
-          '<div class="filter-bar">' +
-            '<div class="search-box">' +
-              '<span class="search-icon">' + icons.search + '</span>' +
-              '<input placeholder="Search events..." oninput="onSearch(this.value)">' +
+          '<form onsubmit="handleAuthSubmit(event)">' +
+            (reg ? '<div class="form-field"><label>Full Name</label><div class="input-wrap"><input name="fullname" placeholder="Alex Morgan" required></div></div>' : '') +
+            '<div class="form-field"><label>Email Address</label><div class="input-wrap"><input name="email" type="email" placeholder="alex@campus.edu" required></div></div>' +
+            '<div class="form-field"><label>Password</label><div class="input-wrap"><input name="password" id="pass-inp" type="' + (showPass ? 'text' : 'password') + '" placeholder="••••••••" minlength="6" oninput="checkStrength(this.value)" required><button type="button" class="pass-toggle-btn" onclick="togglePass()">' + icons.eye + '</button></div>' +
+              '<div class="strength-bar-wrap"><div class="strength-seg" id="str-1"></div><div class="strength-seg" id="str-2"></div><div class="strength-seg" id="str-3"></div><div class="strength-seg" id="str-4"></div></div>' +
+              '<div class="strength-text" id="str-label">Use 6+ characters</div>' +
             '</div>' +
-            '<div class="tag-filters">' +
-              ['ALL', 'Tech', 'Workshop', 'Cultural', 'Sports', 'Party'].map(function(t) {
-                return '<button class="filter-chip ' + (t === filterTag ? 'active' : '') + '" onclick="setFilterTag(\'' + t + '\')">' + t + '</button>';
-              }).join('') +
-            '</div>' +
+            (reg && authRole === 'admin' ? '<div class="admin-code-callout">' + icons.ticket + ' Admin authorization code required (e.g. ADMIN123)</div><div class="form-field"><label>Admin Passcode</label><div class="input-wrap"><input name="adminCode" placeholder="Enter ADMIN123" required></div></div>' : '') +
+            '<div class="auth-error" id="auth-err"></div>' +
+            '<button class="submit-btn" id="auth-btn">' + (reg ? 'Create Account' : 'Sign In') + '</button>' +
+          '</form>' +
+          '<div class="auth-switch">' +
+            (reg ? 'Already have an account? ' : "Don't have an account? ") +
+            '<button onclick="setAuthMode(\'' + (reg ? 'login' : 'register') + '\')">' + (reg ? 'Sign In' : 'Sign Up') + '</button>' +
           '</div>' +
-          '<div class="grid" id="list"></div>'
-      ) +
+        '</div>' +
+      '</div>' +
     '</div>';
-  load();
 }
 
-function onSearch(val) {
-  searchQuery = val.toLowerCase().trim();
-  renderGrid();
+function setAuthMode(m) { authMode = m; renderAuth(); }
+function setAuthRole(r) { authRole = r; renderAuth(); }
+function togglePass() {
+  showPass = !showPass;
+  var inp = $('#pass-inp');
+  if (inp) inp.type = showPass ? 'text' : 'password';
+}
+function checkStrength(v) {
+  var s1 = $('#str-1'), s2 = $('#str-2'), s3 = $('#str-3'), s4 = $('#str-4'), lbl = $('#str-label');
+  if (!s1) return;
+  var score = 0;
+  if (v.length >= 6) score++;
+  if (/[A-Z]/.test(v)) score++;
+  if (/[0-9]/.test(v)) score++;
+  if (/[^A-Za-z0-9]/.test(v)) score++;
+
+  var colors = ['#e2e8f0', '#ef4444', '#f59e0b', '#10b981', '#7c3aed'];
+  var labels = ['Too weak', 'Weak', 'Fair', 'Strong', 'Very strong'];
+  s1.style.background = score >= 1 ? colors[score] : '#e2e8f0';
+  s2.style.background = score >= 2 ? colors[score] : '#e2e8f0';
+  s3.style.background = score >= 3 ? colors[score] : '#e2e8f0';
+  s4.style.background = score >= 4 ? colors[score] : '#e2e8f0';
+  lbl.textContent = labels[score] || 'Too weak';
+  lbl.style.color = score > 0 ? colors[score] : '#94a3b8';
 }
 
-function setFilterTag(t) {
-  filterTag = t;
-  document.querySelectorAll('.filter-chip').forEach(function(el){
-    el.classList.toggle('active', el.textContent === t);
-  });
-  renderGrid();
+async function handleAuthSubmit(e) {
+  e.preventDefault();
+  var f = e.target.elements;
+  var btn = $('#auth-btn');
+  btn.disabled = true; btn.textContent = 'Authenticating…';
+  try {
+    var payload = {
+      fullname: f.fullname ? f.fullname.value : '',
+      email: f.email.value,
+      password: f.password.value,
+      adminCode: f.adminCode ? f.adminCode.value : '',
+      role: authRole
+    };
+    var d = await api('/' + authMode, 'POST', payload);
+    token = d.token; me = d.user;
+    localStorage.t = token; localStorage.me = JSON.stringify(me);
+    render();
+  } catch (err) {
+    $('#auth-err').textContent = err.message;
+    btn.disabled = false; btn.textContent = authMode === 'register' ? 'Create Account' : 'Sign In';
+  }
 }
 
-async function load() {
+/* ── Main Dashboard Screen (Matching Image 2) ── */
+function renderMain() {
+  var isAdmin = me.role === 'admin';
+  $('#app').innerHTML =
+    '<header class="top-nav">' +
+      '<div class="brand-logo">' +
+        '<span class="brand-icon">' + icons.logo + '</span> EVENTIFY' +
+      '</div>' +
+      '<div class="nav-center-menu">' +
+        '<button class="nav-item ' + (activeNav === 'explore' ? 'active' : '') + '" onclick="setNav(\'explore\')">' + icons.compass + ' Explore</button>' +
+        '<button class="nav-item ' + (activeNav === 'calendar' ? 'active' : '') + '" onclick="setNav(\'calendar\')">' + icons.calendar + '</button>' +
+        '<button class="nav-item ' + (activeNav === 'bookmarks' ? 'active' : '') + '" onclick="setNav(\'bookmarks\')">' + icons.bookmark + '</button>' +
+        '<button class="nav-item ' + (activeNav === 'categories' ? 'active' : '') + '" onclick="setNav(\'categories\')">' + icons.grid + '</button>' +
+        '<button class="nav-item-icon-only">' + icons.bell + '<span class="badge-count">3</span></button>' +
+      '</div>' +
+      '<div class="nav-right-actions">' +
+        (isAdmin ? '<button class="card-quick-btn" style="background:#7c3aed;color:#fff;padding:8px 16px;border-radius:9999px" onclick="openAdminCreateModal()">' + icons.plus + ' Create Event</button>' : '') +
+        '<div class="user-pill">' +
+          '<div class="avatar-circle">' + esc((me.name || 'U').charAt(0).toUpperCase()) + '</div>' +
+          '<span class="user-name">' + esc(me.name) + '</span>' +
+          '<span class="role-badge">' + me.role + '</span>' +
+        '</div>' +
+        '<button class="nav-item-icon-only" title="Logout" onclick="logout()">' + icons.logout + '</button>' +
+      '</div>' +
+    '</header>' +
+
+    '<main class="app-container">' +
+      '<div class="search-filter-row">' +
+        '<div class="category-chips-list">' +
+          ['ALL', 'Tech', 'Workshop', 'Cultural', 'Hackathon', 'Sports', 'Party'].map(function(t) {
+            return '<button class="cat-chip ' + (filterTag === t ? 'active' : '') + '" onclick="setTagFilter(\'' + t + '\')">' + t + '</button>';
+          }).join('') +
+        '</div>' +
+        '<div class="search-input-pill">' +
+          '<span class="search-icon">' + icons.search + '</span>' +
+          '<input placeholder="Search events..." value="' + esc(searchQuery) + '" oninput="handleSearch(this.value)">' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="main-split-layout">' +
+        '<div class="left-content-area">' +
+          '<div class="section-heading-bar">' +
+            '<h2 class="section-title">' + icons.compass + ' Featured & Upcoming Events</h2>' +
+            '<span class="section-count" id="event-stat-count">Loading...</span>' +
+          '</div>' +
+          '<div class="posters-grid" id="events-grid"></div>' +
+        '</div>' +
+
+        '<aside class="sidebar-panel">' +
+          '<div class="promo-banner-card">' +
+            '<div class="promo-brand-tag">' + icons.ticket + ' Campus Pass x Eventify</div>' +
+            '<div class="promo-title">FLAT 100% FREE</div>' +
+            '<div class="promo-code-pill">USE CODE: CAMPUSFREE</div>' +
+            '<div class="promo-actions-row">' +
+              '<div class="code-chip">🎫 CAMPUSFREE</div>' +
+              '<button class="promo-book-btn" onclick="toast(\'Promo coupon copied!\')">Get Passes</button>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="leaderboard-card">' +
+            '<div class="leaderboard-header">' +
+              '<div class="leaderboard-title">' + icons.fire + ' Most Interested</div>' +
+              '<div class="timeframe-pill">This Week ▾</div>' +
+            '</div>' +
+            '<div class="leaderboard-list" id="leaderboard-list"></div>' +
+          '</div>' +
+        '</aside>' +
+      '</div>' +
+    '</main>' +
+
+    '<div id="modal-container"></div>';
+
+  loadEvents();
+}
+
+function setNav(n) { activeNav = n; renderMain(); }
+function setTagFilter(t) { filterTag = t; renderGrid(); }
+function handleSearch(q) { searchQuery = q.toLowerCase().trim(); renderGrid(); }
+
+async function loadEvents() {
   try {
     cachedEvents = await api('/events');
     renderGrid();
-    if (me.role === 'admin') {
-      var totalTaken = cachedEvents.reduce(function(s,e){ return s + e.taken; }, 0);
-      $('#stat').textContent = cachedEvents.length + ' event' + (cachedEvents.length !== 1 ? 's' : '') +
-        ' · ' + totalTaken + ' registrations';
-    }
-  } catch(x) { toast(x.message, 1); }
+  } catch (err) {
+    toast(err.message, true);
+  }
 }
 
 function renderGrid() {
   var filtered = cachedEvents.filter(function(e) {
-    var matchesSearch = !searchQuery || e.name.toLowerCase().includes(searchQuery) || (e.description && e.description.toLowerCase().includes(searchQuery));
-    var matchesTag = filterTag === 'ALL' || e.tags.some(function(t){ return t.toLowerCase() === filterTag.toLowerCase(); });
-    return matchesSearch && matchesTag;
+    var matchSearch = !searchQuery || e.name.toLowerCase().includes(searchQuery) || (e.description && e.description.toLowerCase().includes(searchQuery));
+    var matchTag = filterTag === 'ALL' || (e.tags && e.tags.some(function(t){ return t.toLowerCase() === filterTag.toLowerCase(); }));
+    return matchSearch && matchTag;
   });
 
-  $('#list').innerHTML = filtered.map(card).join('') ||
-    '<div style="grid-column:1/-1;text-align:center;padding:48px 20px;background:#fff;border-radius:var(--radius-xl);border:1px dashed var(--bd-strong)">' +
-      '<p style="margin-bottom:6px;font-weight:700;font-size:16px;color:var(--tx-main)">No events match your query</p>' +
-      '<p class="meta">' + (me.role === 'admin' ? 'Publish an event using the form to get started.' : 'Try adjusting your search criteria.') + '</p>' +
+  var countEl = $('#event-stat-count');
+  if (countEl) countEl.textContent = filtered.length + ' event' + (filtered.length !== 1 ? 's' : '') + ' available';
+
+  var grid = $('#events-grid');
+  if (!grid) return;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;background:var(--bg-surface);border-radius:var(--radius-xl);border:1px dashed var(--bd-card)">' +
+      '<p style="font-size:16px;font-weight:700;color:#fff;margin-bottom:6px">No events found</p>' +
+      '<p style="font-size:13px;color:var(--tx-muted)">' + (me.role === 'admin' ? 'Click "+ Create Event" to publish the first one.' : 'Try adjusting your search filters.') + '</p>' +
+    '</div>';
+  } else {
+    grid.innerHTML = filtered.map(function(e, i) {
+      var isFull = e.left <= 0;
+      var bgImg = e.banner || DEFAULT_POSTERS[i % DEFAULT_POSTERS.length];
+      var isAdmin = me.role === 'admin';
+
+      return '<div class="event-poster-card" onclick="openDetailModal(\'' + e.id + '\')">' +
+        '<div class="event-poster-art" style="background-image:url(\'' + bgImg + '\')">' +
+          '<div class="event-poster-overlay">' +
+            '<div class="card-top-tags">' +
+              (e.hype > 0 ? '<span class="pill-badge hot">' + icons.fire + ' ' + e.hype + '</span>' : '<span></span>') +
+              '<span class="pill-badge ' + (isFull ? 'full' : 'seats') + '">' + (isFull ? 'FULL' : e.left + ' left') + '</span>' +
+            '</div>' +
+            '<div class="card-bottom-actions" onclick="event.stopPropagation()">' +
+              (isAdmin 
+                ? '<button class="card-quick-btn" style="background:#ef4444;color:#fff" onclick="deleteEvent(\'' + e.id + '\')">' + icons.trash + ' Delete</button>'
+                : '<button class="card-quick-btn ' + (e.registered ? 'booked' : '') + '" ' + (e.registered || isFull ? 'disabled' : '') + ' onclick="registerEvent(\'' + e.id + '\')">' + (e.registered ? icons.check + ' Booked' : isFull ? 'Sold Out' : icons.ticket + ' RSVP') + '</button>' +
+                  '<button class="card-star-btn ' + (e.interested ? 'active' : '') + '" onclick="toggleInterest(\'' + e.id + '\')">' + icons.star + '</button>'
+              ) +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="event-info-box">' +
+          '<div class="event-name" title="' + esc(e.name) + '">' + esc(e.name) + '</div>' +
+          '<div class="event-sub-meta">' +
+            '<span>' + esc(e.date) + '</span>' +
+            '<span>•</span>' +
+            '<span>' + esc(e.time) + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Render Leaderboard
+  var board = $('#leaderboard-list');
+  if (board) {
+    var topEvents = cachedEvents.slice().sort(function(a,b){ return b.hype - a.hype; }).slice(0, 4);
+    board.innerHTML = topEvents.map(function(e, idx) {
+      var thumb = e.banner || DEFAULT_POSTERS[idx % DEFAULT_POSTERS.length];
+      var rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : '';
+      return '<div class="leaderboard-item" onclick="openDetailModal(\'' + e.id + '\')" style="cursor:pointer">' +
+        '<span class="rank-num ' + rankClass + '">' + (idx + 1) + '</span>' +
+        '<div class="rank-thumb" style="background-image:url(\'' + thumb + '\')"></div>' +
+        '<div class="rank-meta">' +
+          '<div class="rank-name">' + esc(e.name) + '</div>' +
+          '<div class="rank-date">' + esc(e.date) + ' • Campus Hall</div>' +
+          '<div class="rank-hype">' + icons.fire + ' ' + (e.hype || 0) + ' Interested</div>' +
+        '</div>' +
+      '</div>';
+    }).join('') || '<p style="color:var(--tx-muted);font-size:12px">No ranked events yet</p>';
+  }
+}
+
+/* ── Actions ── */
+async function registerEvent(id) {
+  try {
+    await api('/events/' + id + '/register', 'POST');
+    toast('RSVP successful! Pass reserved.');
+    loadEvents();
+  } catch(err) {
+    toast(err.message, true);
+  }
+}
+
+async function toggleInterest(id) {
+  try {
+    await api('/events/' + id + '/interest', 'POST');
+    loadEvents();
+  } catch(err) {
+    toast(err.message, true);
+  }
+}
+
+async function deleteEvent(id) {
+  if (!confirm('Are you sure you want to delete this event?')) return;
+  try {
+    await api('/events/' + id, 'DELETE');
+    toast('Event deleted');
+    closeModal();
+    loadEvents();
+  } catch(err) {
+    toast(err.message, true);
+  }
+}
+
+/* ── Modal Manager ── */
+function closeModal() {
+  var mc = $('#modal-container');
+  if (mc) mc.innerHTML = '';
+}
+
+function openDetailModal(id) {
+  var e = cachedEvents.find(function(x){ return x.id === id; });
+  if (!e) return;
+  var isAdmin = me.role === 'admin';
+  var isFull = e.left <= 0;
+  var pct = Math.min(100, Math.round(e.taken / e.seats * 100));
+  var bg = e.banner || DEFAULT_POSTERS[0];
+
+  $('#modal-container').innerHTML =
+    '<div class="modal-backdrop" onclick="closeModal()">' +
+      '<div class="modal-window" onclick="event.stopPropagation()">' +
+        '<button class="modal-close-btn" onclick="closeModal()">' + icons.close + '</button>' +
+        '<div style="height:180px;border-radius:var(--radius-lg);background-image:url(\'' + bg + '\');background-size:cover;background-position:center;margin-bottom:20px;position:relative">' +
+          '<span class="pill-badge ' + (isFull ? 'full' : 'seats') + '" style="position:absolute;bottom:12px;left:12px">' + (isFull ? 'FULL' : e.left + ' seats available') + '</span>' +
+        '</div>' +
+        '<h2 style="font-size:22px;font-weight:800;margin-bottom:8px">' + esc(e.name) + '</h2>' +
+        '<div style="display:flex;gap:12px;font-size:13px;color:var(--tx-muted);margin-bottom:16px">' +
+          '<span>' + icons.calendar + ' ' + esc(e.date) + '</span>' +
+          '<span>•</span>' +
+          '<span>' + esc(e.time) + '</span>' +
+          '<span>•</span>' +
+          '<span>' + icons.fire + ' ' + e.hype + ' Interested</span>' +
+        '</div>' +
+        (e.tags && e.tags.length ? '<div class="tag-input-row" style="margin-bottom:16px">' + e.tags.map(function(t){ return '<span class="chip-tag">' + esc(t) + '</span>'; }).join('') + '</div>' : '') +
+        (e.description ? '<p style="font-size:14px;color:var(--tx-body);line-height:1.6;margin-bottom:20px">' + esc(e.description) + '</p>' : '') +
+        '<div style="background:var(--bg-input);padding:14px;border-radius:var(--radius-md);margin-bottom:20px">' +
+          '<div style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:var(--tx-muted);margin-bottom:8px">' +
+            '<span>Occupancy</span>' +
+            '<span>' + e.taken + ' / ' + e.seats + ' booked (' + pct + '%)</span>' +
+          '</div>' +
+          '<div style="height:6px;background:rgba(255,255,255,0.1);border-radius:9999px;overflow:hidden">' +
+            '<div style="width:' + pct + '%;height:100%;background:linear-gradient(90deg,#7c3aed,#ec4899);border-radius:9999px"></div>' +
+          '</div>' +
+        '</div>' +
+        (isAdmin
+          ? '<div style="margin-bottom:20px">' +
+              '<h3 style="font-size:15px;margin-bottom:10px">' + icons.users + ' Registered Attendees (' + e.taken + ')</h3>' +
+              '<div style="max-height:140px;overflow-y:auto;background:var(--bg-input);padding:10px;border-radius:var(--radius-md)">' +
+                (e.attendees && e.attendees.length ? e.attendees.map(function(u){ return '<div style="display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0"><span>' + esc(u.name) + '</span><span style="color:var(--tx-muted)">' + esc(u.email) + '</span></div>'; }).join('') : '<p style="font-size:12px;color:var(--tx-muted)">No registrations yet.</p>') +
+              '</div>' +
+            '</div>' +
+            '<button class="submit-btn" style="background:#ef4444" onclick="deleteEvent(\'' + e.id + '\')">' + icons.trash + ' Delete Event</button>'
+          : '<div style="display:flex;gap:10px">' +
+              '<button class="submit-btn" style="flex:2" ' + (e.registered || isFull ? 'disabled' : '') + ' onclick="registerEvent(\'' + e.id + '\')">' + (e.registered ? icons.check + ' You are Registered' : isFull ? 'Event Full' : icons.ticket + ' Book Pass Now') + '</button>' +
+              '<button class="card-star-btn ' + (e.interested ? 'active' : '') + '" style="flex:1;height:auto;border-radius:var(--radius-md)" onclick="toggleInterest(\'' + e.id + '\')">' + icons.fire + ' ' + (e.interested ? 'Interested' : 'Hype') + '</button>' +
+            '</div>'
+        ) +
+      '</div>' +
     '</div>';
 }
 
-function card(e, i) {
-  var a = me.role === 'admin', full = e.left <= 0;
-  var pct = Math.min(100, Math.round(e.taken / e.seats * 100));
-  var tg = e.tags.map(function(t,k){
-    return '<span class="tag t' + (k % 4) + '">' + esc(t) + '</span>';
-  }).join('');
-  var bg = e.banner ? ' style="background-image:url(\'' + e.banner + '\')"' : '';
+function openAdminCreateModal() {
+  newTags = [];
+  newBanner = DEFAULT_POSTERS[0];
 
-  return '<div class="card">' +
-    '<div class="ban"' + bg + '>' +
-      (!a && i === 0 && e.hype > 0 ? '<span class="hot-badge">' + icons.flame + ' Most Hyped</span>' : '') +
-      '<span class="seats-tag">' + (full ? 'FULL' : e.left + ' seats left') + '</span>' +
-    '</div>' +
-    '<div class="card-body">' +
-      (tg ? '<div class="tag-container">' + tg + '</div>' : '') +
-      '<div class="event-title">' + esc(e.name) + '</div>' +
-      '<div class="event-meta">' +
-        '<span>' + icons.calendar + ' ' + esc(e.date) + '</span>' +
-        '<span>' + icons.clock + ' ' + esc(e.time) + '</span>' +
+  $('#modal-container').innerHTML =
+    '<div class="modal-backdrop" onclick="closeModal()">' +
+      '<div class="modal-window" onclick="event.stopPropagation()">' +
+        '<button class="modal-close-btn" onclick="closeModal()">' + icons.close + '</button>' +
+        '<h2 style="font-size:22px;font-weight:800;margin-bottom:6px">Publish Campus Event</h2>' +
+        '<p style="font-size:13px;color:var(--tx-muted);margin-bottom:20px">Create and broadcast an event to all students.</p>' +
+        '<form onsubmit="handleCreateEvent(event)">' +
+          '<div class="form-field"><label>Event Title</label><input class="dark-input" name="title" placeholder="e.g. Annual Hackathon 2026" required></div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">' +
+            '<div class="form-field"><label>Date</label><input class="dark-input" name="date" type="date" required></div>' +
+            '<div class="form-field"><label>Time</label><input class="dark-input" name="time" type="time" required></div>' +
+          '</div>' +
+          '<div class="form-field"><label>Seat Capacity</label><input class="dark-input" name="seats" type="number" min="1" placeholder="100" required></div>' +
+          '<div class="form-field"><label>Description</label><textarea class="dark-input" name="description" rows="3" placeholder="Details about speakers, agenda, venue..."></textarea></div>' +
+          '<div class="form-field"><label>Tags (Press Enter)</label>' +
+            '<input class="dark-input" id="tag-input" onkeydown="handleTagKey(event)" placeholder="e.g. Coding, Workshop, Free">' +
+            '<div class="tag-input-row" id="tag-chips-box"></div>' +
+          '</div>' +
+          '<div class="form-field"><label>Choose Poster Artwork</label>' +
+            '<div class="preset-posters-row">' +
+              DEFAULT_POSTERS.map(function(p, i){
+                return '<div class="preset-poster-thumb ' + (i === 0 ? 'selected' : '') + '" style="background-image:url(\'' + p + '\')" onclick="selectPresetBanner(\'' + p + '\', this)"></div>';
+              }).join('') +
+            '</div>' +
+            '<div style="margin-top:10px"><input type="file" accept="image/*" onchange="handleFileUpload(this.files[0])" style="font-size:12px;color:var(--tx-muted)"></div>' +
+          '</div>' +
+          '<button class="submit-btn" id="create-btn" style="margin-top:20px">' + icons.plus + ' Publish Event</button>' +
+        '</form>' +
       '</div>' +
-      (e.description ? '<p class="event-desc">' + esc(e.description) + '</p>' : '<div style="flex:1"></div>') +
-      '<div class="bar-wrap">' +
-        '<div class="bar-info">' +
-          '<span>Occupancy</span>' +
-          '<span>' + e.taken + '/' + e.seats + ' (' + pct + '%)</span>' +
-        '</div>' +
-        '<div class="bar"><i style="width:' + pct + '%"></i></div>' +
-      '</div>' +
-      (a
-        ? '<details>' +
-            '<summary>' + icons.users + ' Attendees (' + e.taken + ')</summary>' +
-            (e.attendees.map(function(u){
-              return '<p><span>' + esc(u.name) + '</span><span class="meta">' + esc(u.email) + '</span></p>';
-            }).join('') || '<p class="meta">No registrations yet.</p>') +
-          '</details>' +
-          '<div class="row">' +
-            '<button class="btn danger sm" onclick="del(\'' + e.id + '\')">' + icons.trash + ' Delete Event</button>' +
-          '</div>'
-        : '<div class="row">' +
-            '<button class="btn" ' + (e.registered || full ? 'disabled' : '') +
-              ' onclick="reg(\'' + e.id + '\')">' +
-              (e.registered ? icons.check + ' Registered' : full ? 'Event Full' : 'Book Ticket') +
-            '</button>' +
-            '<button class="btn ghost ' + (e.interested ? 'on' : '') + '" onclick="hype(\'' + e.id + '\')">' +
-              (e.interested ? icons.starFill : icons.star) + ' ' + e.hype +
-            '</button>' +
-          '</div>'
-      ) +
-    '</div>' +
-  '</div>';
+    '</div>';
 }
 
-async function act(p, m, msg) {
-  try { await api(p, m); if (msg) toast(msg); } catch(x) { toast(x.message, 1); }
-  load();
+function selectPresetBanner(url, el) {
+  newBanner = url;
+  document.querySelectorAll('.preset-poster-thumb').forEach(function(item){ item.classList.remove('selected'); });
+  if (el) el.classList.add('selected');
 }
-function reg(id) { act('/events/' + id + '/register', 'POST', 'Registration successful'); }
-function hype(id){ act('/events/' + id + '/interest', 'POST'); }
-function del(id) { if (confirm('Delete this event? This cannot be undone.')) act('/events/' + id, 'DELETE', 'Event deleted'); }
 
-/* ── Admin form helpers ── */
-function drawTags() {
-  $('#tg').innerHTML = tags.map(function(t,k){
-    return '<span class="tag t' + (k % 4) + '">' + esc(t) +
-           '<b onclick="tags.splice(' + k + ',1);drawTags()">×</b></span>';
-  }).join('');
-}
-function tk(e) {
+function handleTagKey(e) {
   if (e.key === 'Enter' || e.key === ',') {
     e.preventDefault();
-    var t = e.target.value.trim();
-    if (t && tags.length < 6 && !tags.includes(t)) tags.push(t);
+    var val = e.target.value.trim();
+    if (val && newTags.length < 6 && !newTags.includes(val)) {
+      newTags.push(val);
+      drawAdminTags();
+    }
     e.target.value = '';
-    drawTags();
-  }
-}
-function pick(f) {
-  if (!f) return;
-  var im = new Image();
-  im.onload = function() {
-    var c = document.createElement('canvas');
-    var k = Math.min(1, 900 / im.width);
-    c.width = im.width * k; c.height = im.height * k;
-    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
-    banner = c.toDataURL('image/jpeg', .8);
-    toast('Banner attached');
-  };
-  im.src = URL.createObjectURL(f);
-}
-async function mk(ev) {
-  ev.preventDefault();
-  var f = ev.target;
-  function g(n){ return f.elements[n] ? f.elements[n].value : ''; }
-  var pend = $('#ti') ? $('#ti').value.trim() : '';
-  if (pend && !tags.includes(pend)) tags.push(pend);
-  var btn = $('#pub-btn') || f.querySelector('button');
-  if (btn) { btn.disabled = true; btn.textContent = 'Publishing…'; }
-  try {
-    await api('/events', 'POST', {
-      name: g('title'), date: g('date'), time: g('time'),
-      seats: g('seats'), description: g('description'), tags: tags, banner: banner
-    });
-    f.reset(); tags = []; banner = ''; drawTags();
-    toast('Event published successfully');
-    load();
-  } catch(x) {
-    toast(x.message, 1);
-  } finally {
-    if (btn) { btn.disabled = false; btn.innerHTML = icons.plus + ' Publish Event'; }
   }
 }
 
-show();
+function drawAdminTags() {
+  var box = $('#tag-chips-box');
+  if (!box) return;
+  box.innerHTML = newTags.map(function(t, i){
+    return '<span class="chip-tag">' + esc(t) + '<b onclick="newTags.splice(' + i + ',1);drawAdminTags()">×</b></span>';
+  }).join('');
+}
+
+function handleFileUpload(file) {
+  if (!file) return;
+  var im = new Image();
+  im.onload = function() {
+    var canvas = document.createElement('canvas');
+    var maxDim = 800;
+    var scale = Math.min(1, maxDim / Math.max(im.width, im.height));
+    canvas.width = im.width * scale;
+    canvas.height = im.height * scale;
+    canvas.getContext('2d').drawImage(im, 0, 0, canvas.width, canvas.height);
+    newBanner = canvas.toDataURL('image/jpeg', 0.85);
+    toast('Custom poster uploaded!');
+  };
+  im.src = URL.createObjectURL(file);
+}
+
+async function handleCreateEvent(e) {
+  e.preventDefault();
+  var f = e.target.elements;
+  var btn = $('#create-btn');
+  btn.disabled = true; btn.textContent = 'Publishing…';
+  try {
+    await api('/events', 'POST', {
+      name: f.title.value,
+      date: f.date.value,
+      time: f.time.value,
+      seats: f.seats.value,
+      description: f.description.value,
+      tags: newTags,
+      banner: newBanner
+    });
+    toast('Event published successfully!');
+    closeModal();
+    loadEvents();
+  } catch(err) {
+    toast(err.message, true);
+    btn.disabled = false; btn.textContent = 'Publish Event';
+  }
+}
+
+render();
 </script>
 </body>
 </html>
