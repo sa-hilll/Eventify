@@ -4,10 +4,11 @@ try {
   // DNS override not supported in some serverless environments
 }
 
+const path = require('path');
 const express = require('express'), mongoose = require('mongoose'), bcrypt = require('bcryptjs'), jwt = require('jsonwebtoken');
 const app = express();
 app.use(express.json({ limit: '6mb' }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 let dbConnection = null;
 async function connectDB() {
@@ -125,6 +126,13 @@ app.post('/api/events/:id/interest', auth('student'), wrap(async (q, s) => {
     ? { $pull: { interested: q.user.id } } : { $addToSet: { interested: q.user.id } });
   s.json({ ok: true });
 }));
+
+app.get('*', (req, res) => {
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'Endpoint not found' });
+  }
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 if (require.main === module) {
   const PORT = process.env.PORT || 3000;
