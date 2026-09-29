@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eventify — Campus Event Management</title>
+<meta name="description" content="Discover, register, and manage campus events with Eventify.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-canvas: #FAF9FE;
+  --surface: #FFFFFF;
+  --surface-subtle: #F4F3FA;
+  
+  /* Pastel Primary & Accents */
+  --primary: #7C3AED;
+  --primary-hover: #6D28D9;
+  --primary-light: #F3E8FF;
+  --primary-border: #DDD6FE;
+  
+  --pastel-rose: #FCE7F3;
+  --pastel-rose-text: #9D174D;
+  --pastel-rose-bd: #F9A8D4;
+  
+  --pastel-mint: #ECFDF5;
+  --pastel-mint-text: #047857;
+  --pastel-mint-bd: #6EE7B7;
+  
+  --pastel-sky: #EFF6FF;
+  --pastel-sky-text: #1D4ED8;
+  --pastel-sky-bd: #93C5FD;
+  
+  --pastel-amber: #FFF7ED;
+  --pastel-amber-text: #C2410C;
+  --pastel-amber-bd: #FDBA74;
+
+  --tx-main: #1E1B4B;
+  --tx-muted: #64748B;
+  --tx-subtle: #94A3B8;
+  
+  --bd-subtle: #E2E8F0;
+  --bd-strong: #CBD5E1;
+  
+  --radius-xl: 18px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-full: 9999px;
+  
+  --shadow-sm: 0 2px 4px rgba(30, 27, 75, 0.03);
+  --shadow-md: 0 8px 24px -4px rgba(30, 27, 75, 0.06);
+  --shadow-hover: 0 16px 32px -6px rgba(124, 58, 237, 0.12);
+  
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--font-main);
+  background-color: var(--bg-canvas);
+  background-image: 
+    radial-gradient(at 15% 15%, rgba(167, 139, 250, 0.08) 0px, transparent 55%),
+    radial-gradient(at 85% 85%, rgba(244, 114, 182, 0.06) 0px, transparent 55%),
+    radial-gradient(at 50% 50%, rgba(110, 231, 183, 0.05) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--tx-main);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+  color: var(--tx-main);
+  margin: 0;
+}
+
+h1 { font-size: 26px; font-weight: 800; }
+h2 { font-size: 19px; font-weight: 700; }
+h3 { font-size: 16px; font-weight: 700; }
+
+.sub, .meta { color: var(--tx-muted); font-size: 13.5px; margin: 0; }
+.sub { font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+
+.icon-svg {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Hero Banner with Pastel Gradient ── */
+.hero-banner {
+  background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 40%, #F472B6 100%);
+  border-radius: var(--radius-xl);
+  padding: 32px 36px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 28px;
+  box-shadow: 0 12px 32px -4px rgba(124, 58, 237, 0.22);
+}
+.hero-banner h1 { color: #fff; font-size: 30px; font-weight: 800; margin-bottom: 8px; }
+.hero-banner p { color: rgba(255,255,255,0.92); font-size: 14.5px; margin: 0; max-width: 580px; line-height: 1.5; }
+.hero-badges { display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+.hero-pill {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px; font-weight: 600; color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+
+/* ── Auth Card ── */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  background-image: radial-gradient(#CBD5E1 0.8px, transparent 0.8px);
+  background-size: 20px 20px;
+}
+.auth-card {
+  width: 100%; max-width: 420px;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  padding: 36px 32px;
+  border: 1px solid var(--bd-subtle);
+  box-shadow: 0 20px 40px -10px rgba(30, 27, 75, 0.08);
+  position: relative;
+}
+.auth-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 5px;
+  background: linear-gradient(90deg, #7C3AED, #F472B6, #6EE7B7);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+.logo-box {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-heading); font-weight: 800; font-size: 22px;
+  color: var(--tx-main); margin-bottom: 24px;
+}
+.logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #7C3AED, #A78BFA);
+  color: #fff; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.seg-control {
+  display: flex; background: var(--surface-subtle);
+  border-radius: var(--radius-lg); padding: 4px;
+  margin-bottom: 22px; border: 1px solid var(--bd-subtle);
+}
+.seg-control button {
+  flex: 1; border: 0; background: none; padding: 9px;
+  border-radius: var(--radius-md); cursor: pointer;
+  color: var(--tx-muted); font-family: inherit; font-size: 13.5px; font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.seg-control button.on {
+  background: #fff; color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.form-group { margin-bottom: 16px; }
+label {
+  display: block; font-size: 12px; color: var(--tx-muted);
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px;
+}
+input, textarea {
+  width: 100%; padding: 10px 14px;
+  border: 1.5px solid var(--bd-subtle); border-radius: var(--radius-md);
+  font-family: inherit; font-size: 14px; color: var(--tx-main);
+  background: #fff; transition: all 0.2s ease;
+}
+input:focus, textarea:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+}
+
+.callout-box {
+  background: var(--pastel-amber); border: 1px solid var(--pastel-amber-bd);
+  border-radius: var(--radius-md); padding: 10px 14px; font-size: 12.5px;
+  color: var(--pastel-amber-text); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px; font-weight: 500;
+}
+
+/* ── Buttons with Pastel Gradient Touch ── */
+.btn {
+  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+  color: #fff; border: 0; border-radius: var(--radius-md);
+  padding: 11px 18px; font-family: inherit; font-weight: 700; font-size: 13.5px;
+  cursor: pointer; width: 100%; transition: all 0.2s ease;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+}
+.btn:hover {
+  background: linear-gradient(135deg, #6D28D9 0%, #5B21B6 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.32);
+}
+.btn:active { transform: translateY(0.5px); }
+.btn:disabled {
+  background: var(--bd-strong); color: var(--tx-subtle);
+  cursor: not-allowed; transform: none; box-shadow: none;
+}
+.btn.ghost {
+  background: #fff; color: var(--tx-main);
+  border: 1.5px solid var(--bd-subtle); box-shadow: var(--shadow-sm);
+}
+.btn.ghost:hover {
+  background: var(--surface-subtle); border-color: var(--bd-strong);
+  color: var(--primary);
+}
+.btn.ghost.on {
+  background: var(--pastel-rose); color: var(--pastel-rose-text);
+  border-color: var(--pastel-rose-bd);
+}
+.btn.sm { width: auto; padding: 7px 14px; font-size: 12.5px; }
+.btn.danger {
+  background: #FEF2F2; color: #DC2626; border: 1.5px solid #FCA5A5; box-shadow: none;
+}
+.btn.danger:hover { background: #DC2626; color: #fff; border-color: #DC2626; }
+
+.link {
+  background: none; border: 0; color: var(--primary); cursor: pointer;
+  padding: 0; font-family: inherit; font-weight: 700;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.err {
+  color: #DC2626; font-size: 13px; min-height: 20px;
+  margin-bottom: 10px; font-weight: 600; display: flex; align-items: center; gap: 6px;
+}
+
+/* ── Header Nav ── */
+nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 32px; background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px); border-bottom: 1px solid var(--bd-subtle);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-brand {
+  font-family: var(--font-heading); font-weight: 800; font-size: 20px;
+  color: var(--tx-main); display: flex; align-items: center; gap: 8px;
+}
+.badge-role {
+  background: linear-gradient(135deg, var(--primary), #A78BFA);
+  color: #fff; font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: var(--radius-full);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+/* ── Layout & Admin Grid ── */
+.wrap { max-width: 1160px; margin: 32px auto; padding: 0 24px; }
+.admin { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
+@media(max-width: 860px) { .admin { grid-template-columns: 1fr; } }
+.panel {
+  background: var(--surface); border: 1px solid var(--bd-subtle);
+  border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-md);
+}
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ── Filter Bar ── */
+.filter-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+}
+.search-box { position: relative; flex: 1; max-width: 320px; }
+.search-box input { padding-left: 38px; background: var(--surface); border-radius: var(--radius-full); }
+.search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--tx-subtle); pointer-events: none; display: flex;
+}
+.tag-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-chip {
+  background: var(--surface); border: 1px solid var(--bd-subtle);
+  padding: 6px 14px; border-radius: var(--radius-full);
+  font-size: 12.5px; font-weight: 600; color: var(--tx-muted);
+  cursor: pointer; transition: all 0.2s ease;
+}
+.filter-chip:hover, .filter-chip.active {
+  background: var(--primary); color: #fff; border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.22);
+}
+
+/* ── Cards with Pastel Accents & Gradients ── */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin-top: 16px; }
+.card {
+  background: var(--surface); border: 1px solid var(--bd-subtle);
+  border-radius: var(--radius-xl); overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
+}
+.card:hover {
+  box-shadow: var(--shadow-hover); transform: translateY(-3px);
+  border-color: rgba(124, 58, 237, 0.25);
+}
+
+.ban {
+  height: 150px;
+  background: linear-gradient(135deg, #A78BFA 0%, #F472B6 50%, #FDBA74 100%) center/cover;
+  position: relative;
+}
+.hot-badge {
+  position: absolute; top: 12px; left: 12px;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(6px);
+  color: #BE185D; font-size: 11px; font-weight: 800;
+  padding: 4px 10px; border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex; align-items: center; gap: 4px;
+}
+.seats-tag {
+  position: absolute; bottom: 12px; right: 12px;
+  background: rgba(30, 27, 75, 0.85); backdrop-filter: blur(6px);
+  color: #fff; font-size: 11px; font-weight: 700;
+  padding: 4px 10px; border-radius: var(--radius-md);
+}
+
+.card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+
+/* Pastel Tags */
+.tag-container { margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11.5px; font-weight: 700; padding: 4px 10px;
+  border-radius: var(--radius-md);
+}
+.t0 { background: var(--pastel-rose); color: var(--pastel-rose-text); border: 1px solid var(--pastel-rose-bd); }
+.t1 { background: var(--pastel-mint); color: var(--pastel-mint-text); border: 1px solid var(--pastel-mint-bd); }
+.t2 { background: var(--pastel-sky); color: var(--pastel-sky-text); border: 1px solid var(--pastel-sky-bd); }
+.t3 { background: var(--pastel-amber); color: var(--pastel-amber-text); border: 1px solid var(--pastel-amber-bd); }
+.tag b { cursor: pointer; margin-left: 4px; font-weight: 600; opacity: 0.7; }
+.tag b:hover { opacity: 1; }
+
+.event-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; line-height: 1.35; }
+.event-meta { display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--tx-muted); margin-bottom: 12px; }
+.event-meta span { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; }
+.event-desc { font-size: 13.5px; color: var(--tx-muted); line-height: 1.55; margin-bottom: 16px; flex: 1; }
+
+.bar-wrap { margin-top: auto; padding-top: 8px; }
+.bar-info { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--tx-muted); margin-bottom: 6px; }
+.bar { height: 7px; background: var(--surface-subtle); border-radius: var(--radius-full); overflow: hidden; }
+.bar i {
+  display: block; height: 100%;
+  background: linear-gradient(90deg, #7C3AED, #F472B6);
+  border-radius: var(--radius-full); transition: width 0.5s ease;
+}
+
+.row { display: flex; gap: 10px; margin-top: 16px; }
+
+details {
+  margin-top: 14px; background: var(--surface-subtle);
+  border-radius: var(--radius-md); padding: 10px 14px; font-size: 13px;
+}
+summary { cursor: pointer; color: var(--primary); font-weight: 700; user-select: none; display: flex; align-items: center; gap: 6px; }
+details p { margin: 6px 0; color: var(--tx-main); font-size: 12.5px; display: flex; justify-content: space-between; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--tx-main); color: #fff;
+  padding: 10px 20px; border-radius: var(--radius-full);
+  z-index: 1000; font-size: 13.5px; font-weight: 700;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: flex; align-items: center; gap: 8px;
+  animation: slideDown 0.3s ease;
+}
+.toast.bad { background: #DC2626; }
+@keyframes slideDown {
+  from { opacity: 0; transform: translateX(-50%) translateY(-15px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ── Clean SVG Icon Registry ── */
+var icons = {
+  ticket: '<svg class="icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg>',
+  user: '<svg class="icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  shield: '<svg class="icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  calendar: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  clock: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  flame: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3.5z"/></svg>',
+  star: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  starFill: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  search: '<svg class="icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+  trash: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  check: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  plus: '<svg class="icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  info: '<svg class="icon-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+  users: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-3-3.87"/><path d="M9 21v-2a4 4 0 0 1 3-3.87"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><circle cx="16" cy="3.13" r="3"/></svg>',
+  logout: '<svg class="icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>'
+};
+
+/* ── Helpers ── */
+function $(s){ return document.querySelector(s); }
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';'); }
+
+/* ── State ── */
+var token        = localStorage.t;
+var me           = JSON.parse(localStorage.me || 'null');
+var mode         = 'login';
+var role         = 'student';
+var tags         = [];
+var banner       = '';
+var searchQuery  = '';
+var filterTag    = 'ALL';
+var cachedEvents = [];
+
+/* ── API ── */
+async function api(p, m, b) {
+  m = m || 'GET';
+  var r = await fetch('/api' + p, {
+    method: m,
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+    body: b ? JSON.stringify(b) : undefined
+  });
+  var d = await r.json().catch(function(){ return {}; });
+  if (!r.ok) { if (r.status === 401 && token) logout(); throw new Error(d.error || 'Something went wrong'); }
+  return d;
+}
+
+function toast(m, bad) {
+  var t = document.createElement('div');
+  t.className = 'toast' + (bad ? ' bad' : '');
+  t.innerHTML = (bad ? icons.info : icons.check) + ' ' + esc(m);
+  document.body.append(t);
+  setTimeout(function(){ t.remove(); }, 2800);
+}
+
+function logout() { localStorage.clear(); token = me = null; show(); }
+function show()   { me ? dash() : authView(); }
+
+function setRole(r) { role = r; authView(); }
+function setMode(m) { mode = m; authView(); }
+
+/* ── Auth view ── */
+function authView() {
+  var reg = mode === 'register';
+  $('#app').innerHTML =
+    '<div class="auth-wrapper">' +
+      '<main class="auth-card">' +
+        '<div class="logo-box"><span class="logo-icon">' + icons.ticket + '</span> Eventify</div>' +
+        '<h1>' + (reg ? 'Create Account' : 'Welcome Back') + '</h1>' +
+        '<p class="sub">' + (reg ? 'Select your role and get started.' : 'Log in to view upcoming campus events.') + '</p>' +
+        '<div class="seg-control">' +
+          ['student', 'admin'].map(function(r) {
+            return '<button type="button" id="role-' + r + '" class="' + (r === role ? 'on' : '') +
+                   '" onclick="setRole(\'' + r + '\')">' + (r === 'student' ? icons.user + ' Student' : icons.shield + ' Admin') + '</button>';
+          }).join('') +
+        '</div>' +
+        '<form onsubmit="sub(event)">' +
+          (reg ? '<div class="form-group"><label>Full Name</label><input name="fullname" placeholder="Alex Morgan" required></div>' : '') +
+          '<div class="form-group"><label>Email Address</label><input name="email" type="email" placeholder="alex@campus.edu" required></div>' +
+          '<div class="form-group"><label>Password</label><input name="password" type="password" placeholder="••••••••" minlength="6" required></div>' +
+          (reg && role === 'admin' 
+            ? '<div class="callout-box">' + icons.info + ' Enter admin authorization code to proceed.</div>' +
+              '<div class="form-group"><label>Admin Code</label><input name="adminCode" placeholder="e.g. ADMIN123" required></div>' 
+            : '') +
+          '<div class="err" id="err"></div>' +
+          '<button class="btn" id="auth-submit">' + (reg ? 'Create Account' : 'Log In') + '</button>' +
+        '</form>' +
+        '<p class="meta" style="margin-top:20px;text-align:center">' +
+          (reg ? 'Already registered?' : 'New to Eventify?') + ' ' +
+          '<button class="link" onclick="setMode(\'' + (reg ? 'login' : 'register') + '\')">' +
+            (reg ? 'Log in' : 'Create account') +
+          '</button>' +
+        '</p>' +
+      '</main>' +
+    '</div>';
+}
+
+async function sub(ev) {
+  ev.preventDefault();
+  var f = ev.target.elements;
+  function v(n){ return f[n] ? f[n].value : ''; }
+  var btn = $('#auth-submit');
+  btn.disabled = true; btn.textContent = 'Authenticating…';
+  try {
+    var r = await fetch('/api/' + mode, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fullname: v('fullname'), email: v('email'), password: v('password'), adminCode: v('adminCode'), role: role })
+    });
+    var d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    token = d.token; me = d.user;
+    localStorage.t = token; localStorage.me = JSON.stringify(me);
+    show();
+  } catch(x) {
+    $('#err').textContent = x.message;
+    btn.disabled = false; btn.textContent = mode === 'register' ? 'Create Account' : 'Log In';
+  }
+}
+
+/* ── Dashboards ── */
+function dash() {
+  var a = me.role === 'admin';
+  $('#app').innerHTML =
+    '<nav>' +
+      '<span class="nav-brand"><span class="logo-icon" style="width:30px;height:30px">' + icons.ticket + '</span> Eventify</span>' +
+      '<div style="display:flex;align-items:center;gap:12px">' +
+        '<span class="badge-role">' + me.role + '</span>' +
+        '<span style="font-weight:700;font-size:13.5px;color:var(--tx-main)">' + esc(me.name) + '</span>' +
+        '<button class="btn ghost sm" onclick="logout()">' + icons.logout + ' Logout</button>' +
+      '</div>' +
+    '</nav>' +
+    '<div class="wrap">' +
+      (a
+        ? '<div class="admin">' +
+            '<form class="panel" onsubmit="mk(event)">' +
+              '<h2>Publish Event</h2>' +
+              '<p class="sub" style="margin-bottom:16px">Create and broadcast an event to all campus students.</p>' +
+              '<div class="form-group"><label>Event Title</label><input name="title" placeholder="e.g. Annual Tech Symposium" required></div>' +
+              '<div class="two">' +
+                '<div class="form-group"><label>Date</label><input name="date" type="date" required></div>' +
+                '<div class="form-group"><label>Time</label><input name="time" type="time" required></div>' +
+              '</div>' +
+              '<div class="form-group"><label>Seats Limit</label><input name="seats" type="number" min="1" placeholder="50" required></div>' +
+              '<div class="form-group"><label>Description</label><textarea name="description" rows="3" placeholder="Provide event details..."></textarea></div>' +
+              '<div class="form-group"><label>Tags (Press Enter)</label>' +
+              '<input id="ti" onkeydown="tk(event)" placeholder="e.g. Workshop, Tech, Free">' +
+              '<div id="tg" class="tag-container" style="margin-top:8px"></div></div>' +
+              '<div class="form-group"><label>Banner Poster</label><input type="file" accept="image/*" onchange="pick(this.files[0])"></div>' +
+              '<button type="submit" id="pub-btn" class="btn" style="margin-top:10px">' + icons.plus + ' Publish Event</button>' +
+            '</form>' +
+            '<div>' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">' +
+                '<h2>Manage Events</h2>' +
+                '<p class="sub" id="stat" style="margin:0;font-weight:600"></p>' +
+              '</div>' +
+              '<div class="grid" id="list"></div>' +
+            '</div>' +
+          '</div>'
+        : '<div class="hero-banner">' +
+            '<h1>Campus Events & Activities</h1>' +
+            '<p>Discover workshops, seminars, competitions, and gatherings happening around your campus.</p>' +
+            '<div class="hero-badges">' +
+              '<span class="hero-pill">' + icons.check + ' Instant Registration</span>' +
+              '<span class="hero-pill">' + icons.users + ' Open to All Students</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="filter-bar">' +
+            '<div class="search-box">' +
+              '<span class="search-icon">' + icons.search + '</span>' +
+              '<input placeholder="Search events..." oninput="onSearch(this.value)">' +
+            '</div>' +
+            '<div class="tag-filters">' +
+              ['ALL', 'Tech', 'Workshop', 'Cultural', 'Sports', 'Party'].map(function(t) {
+                return '<button class="filter-chip ' + (t === filterTag ? 'active' : '') + '" onclick="setFilterTag(\'' + t + '\')">' + t + '</button>';
+              }).join('') +
+            '</div>' +
+          '</div>' +
+          '<div class="grid" id="list"></div>'
+      ) +
+    '</div>';
+  load();
+}
+
+function onSearch(val) {
+  searchQuery = val.toLowerCase().trim();
+  renderGrid();
+}
+
+function setFilterTag(t) {
+  filterTag = t;
+  document.querySelectorAll('.filter-chip').forEach(function(el){
+    el.classList.toggle('active', el.textContent === t);
+  });
+  renderGrid();
+}
+
+async function load() {
+  try {
+    cachedEvents = await api('/events');
+    renderGrid();
+    if (me.role === 'admin') {
+      var totalTaken = cachedEvents.reduce(function(s,e){ return s + e.taken; }, 0);
+      $('#stat').textContent = cachedEvents.length + ' event' + (cachedEvents.length !== 1 ? 's' : '') +
+        ' · ' + totalTaken + ' registrations';
+    }
+  } catch(x) { toast(x.message, 1); }
+}
+
+function renderGrid() {
+  var filtered = cachedEvents.filter(function(e) {
+    var matchesSearch = !searchQuery || e.name.toLowerCase().includes(searchQuery) || (e.description && e.description.toLowerCase().includes(searchQuery));
+    var matchesTag = filterTag === 'ALL' || e.tags.some(function(t){ return t.toLowerCase() === filterTag.toLowerCase(); });
+    return matchesSearch && matchesTag;
+  });
+
+  $('#list').innerHTML = filtered.map(card).join('') ||
+    '<div style="grid-column:1/-1;text-align:center;padding:48px 20px;background:#fff;border-radius:var(--radius-xl);border:1px dashed var(--bd-strong)">' +
+      '<p style="margin-bottom:6px;font-weight:700;font-size:16px;color:var(--tx-main)">No events match your query</p>' +
+      '<p class="meta">' + (me.role === 'admin' ? 'Publish an event using the form to get started.' : 'Try adjusting your search criteria.') + '</p>' +
+    '</div>';
+}
+
+function card(e, i) {
+  var a = me.role === 'admin', full = e.left <= 0;
+  var pct = Math.min(100, Math.round(e.taken / e.seats * 100));
+  var tg = e.tags.map(function(t,k){
+    return '<span class="tag t' + (k % 4) + '">' + esc(t) + '</span>';
+  }).join('');
+  var bg = e.banner ? ' style="background-image:url(\'' + e.banner + '\')"' : '';
+
+  return '<div class="card">' +
+    '<div class="ban"' + bg + '>' +
+      (!a && i === 0 && e.hype > 0 ? '<span class="hot-badge">' + icons.flame + ' Most Hyped</span>' : '') +
+      '<span class="seats-tag">' + (full ? 'FULL' : e.left + ' seats left') + '</span>' +
+    '</div>' +
+    '<div class="card-body">' +
+      (tg ? '<div class="tag-container">' + tg + '</div>' : '') +
+      '<div class="event-title">' + esc(e.name) + '</div>' +
+      '<div class="event-meta">' +
+        '<span>' + icons.calendar + ' ' + esc(e.date) + '</span>' +
+        '<span>' + icons.clock + ' ' + esc(e.time) + '</span>' +
+      '</div>' +
+      (e.description ? '<p class="event-desc">' + esc(e.description) + '</p>' : '<div style="flex:1"></div>') +
+      '<div class="bar-wrap">' +
+        '<div class="bar-info">' +
+          '<span>Occupancy</span>' +
+          '<span>' + e.taken + '/' + e.seats + ' (' + pct + '%)</span>' +
+        '</div>' +
+        '<div class="bar"><i style="width:' + pct + '%"></i></div>' +
+      '</div>' +
+      (a
+        ? '<details>' +
+            '<summary>' + icons.users + ' Attendees (' + e.taken + ')</summary>' +
+            (e.attendees.map(function(u){
+              return '<p><span>' + esc(u.name) + '</span><span class="meta">' + esc(u.email) + '</span></p>';
+            }).join('') || '<p class="meta">No registrations yet.</p>') +
+          '</details>' +
+          '<div class="row">' +
+            '<button class="btn danger sm" onclick="del(\'' + e.id + '\')">' + icons.trash + ' Delete Event</button>' +
+          '</div>'
+        : '<div class="row">' +
+            '<button class="btn" ' + (e.registered || full ? 'disabled' : '') +
+              ' onclick="reg(\'' + e.id + '\')">' +
+              (e.registered ? icons.check + ' Registered' : full ? 'Event Full' : 'Book Ticket') +
+            '</button>' +
+            '<button class="btn ghost ' + (e.interested ? 'on' : '') + '" onclick="hype(\'' + e.id + '\')">' +
+              (e.interested ? icons.starFill : icons.star) + ' ' + e.hype +
+            '</button>' +
+          '</div>'
+      ) +
+    '</div>' +
+  '</div>';
+}
+
+async function act(p, m, msg) {
+  try { await api(p, m); if (msg) toast(msg); } catch(x) { toast(x.message, 1); }
+  load();
+}
+function reg(id) { act('/events/' + id + '/register', 'POST', 'Registration successful'); }
+function hype(id){ act('/events/' + id + '/interest', 'POST'); }
+function del(id) { if (confirm('Delete this event? This cannot be undone.')) act('/events/' + id, 'DELETE', 'Event deleted'); }
+
+/* ── Admin form helpers ── */
+function drawTags() {
+  $('#tg').innerHTML = tags.map(function(t,k){
+    return '<span class="tag t' + (k % 4) + '">' + esc(t) +
+           '<b onclick="tags.splice(' + k + ',1);drawTags()">×</b></span>';
+  }).join('');
+}
+function tk(e) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    var t = e.target.value.trim();
+    if (t && tags.length < 6 && !tags.includes(t)) tags.push(t);
+    e.target.value = '';
+    drawTags();
+  }
+}
+function pick(f) {
+  if (!f) return;
+  var im = new Image();
+  im.onload = function() {
+    var c = document.createElement('canvas');
+    var k = Math.min(1, 900 / im.width);
+    c.width = im.width * k; c.height = im.height * k;
+    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    banner = c.toDataURL('image/jpeg', .8);
+    toast('Banner attached');
+  };
+  im.src = URL.createObjectURL(f);
+}
+async function mk(ev) {
+  ev.preventDefault();
+  var f = ev.target;
+  function g(n){ return f.elements[n] ? f.elements[n].value : ''; }
+  var pend = $('#ti') ? $('#ti').value.trim() : '';
+  if (pend && !tags.includes(pend)) tags.push(pend);
+  var btn = $('#pub-btn') || f.querySelector('button');
+  if (btn) { btn.disabled = true; btn.textContent = 'Publishing…'; }
+  try {
+    await api('/events', 'POST', {
+      name: g('title'), date: g('date'), time: g('time'),
+      seats: g('seats'), description: g('description'), tags: tags, banner: banner
+    });
+    f.reset(); tags = []; banner = ''; drawTags();
+    toast('Event published successfully');
+    load();
+  } catch(x) {
+    toast(x.message, 1);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = icons.plus + ' Publish Event'; }
+  }
+}
+
+show();
+</script>
+</body>
+</html>
