@@ -1,8 +1,33 @@
-require('dns').setServers(['8.8.8.8', '8.8.4.4']); // router blocks SRV lookups; use Google DNS
+try {
+  require('dns').setServers(['8.8.8.8', '8.8.4.4']); // router blocks SRV lookups; use Google DNS
+} catch (e) {
+  // DNS override not supported in some serverless environments
+}
+
 const express = require('express'), mongoose = require('mongoose'), bcrypt = require('bcryptjs'), jwt = require('jsonwebtoken');
 const app = express();
 app.use(express.json({ limit: '6mb' }));
 app.use(express.static('public'));
+
+let dbConnection = null;
+async function connectDB() {
+  if (dbConnection && mongoose.connection.readyState === 1) return dbConnection;
+  const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/college_events';
+  const opts = process.env.MONGO_URI ? { tls: true, tlsInsecure: true } : {};
+  dbConnection = await mongoose.connect(uri, opts);
+  return dbConnection;
+}
+
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    try {
+      await connectDB();
+    } catch (err) {
+      return res.status(500).json({ error: 'Database connection failed: ' + err.message });
+    }
+  }
+  next();
+});
 
 const SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
 const ADMIN_CODE = (process.env.ADMIN_CODE || 'ADMIN123').trim(); // needed to sign up as admin
@@ -101,10 +126,14 @@ app.post('/api/events/:id/interest', auth('student'), wrap(async (q, s) => {
   s.json({ ok: true });
 }));
 
-mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/college_events',
-  process.env.MONGO_URI ? { tls: true, tlsInsecure: true } : {})
-  .then(() => app.listen(3000, () => {
-    console.log('Running on http://localhost:3000');
-    console.log('Admin code:', ADMIN_CODE);
-  }))
-  .catch(e => console.error('MongoDB connection failed:', e.message));
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  connectDB()
+    .then(() => app.listen(PORT, () => {
+      console.log(`Running on http://localhost:${PORT}`);
+      console.log('Admin code:', ADMIN_CODE);
+    }))
+    .catch(e => console.error('MongoDB connection failed:', e.message));
+}
+
+module.exports = app;
