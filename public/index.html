@@ -424,32 +424,19 @@ button, input, textarea { font-family: inherit; }
 }
 
 /* ── Right Sidebar ── */
-.sidebar-panel { display: flex; flex-direction: column; gap: 28px; }
-.promo-banner-card {
-  position: relative; border-radius: var(--radius-xl); overflow: hidden;
-  background: linear-gradient(135deg, #200f3d 0%, #3b0764 50%, #150528 100%);
-  border: 1px solid rgba(168, 85, 247, 0.4); padding: 26px 22px;
-  box-shadow: 0 12px 34px rgba(139, 92, 246, 0.3);
-  display: flex; flex-direction: column; align-items: center; text-align: center;
+.sidebar-panel { display: flex; flex-direction: column; gap: 24px; }
+
+.info-widget-card {
+  background: var(--bg-surface); border: 1px solid var(--bd-card-strong);
+  border-radius: var(--radius-xl); padding: 22px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
-.promo-brand-tag {
-  font-family: var(--font-heading); font-size: 14.5px; font-weight: 900;
-  letter-spacing: 0.1em; color: #f3e8ff; text-transform: uppercase;
-  margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+.widget-header {
+  font-size: 15px; font-weight: 800; color: #ffffff;
+  margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
 }
-.promo-title { font-size: 24px; font-weight: 900; color: #ffffff; line-height: 1.2; margin-bottom: 6px; }
-.promo-code-pill { font-size: 12.5px; font-weight: 800; color: #c084fc; letter-spacing: 0.08em; margin-bottom: 18px; }
-.promo-actions-row { display: flex; width: 100%; gap: 10px; }
-.code-chip {
-  flex: 1; background: rgba(0, 0, 0, 0.6); border: 1.5px dashed rgba(255, 255, 255, 0.35);
-  padding: 9px 12px; border-radius: var(--radius-md); font-size: 12px; font-weight: 800;
-  color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px;
-}
-.promo-book-btn {
-  flex: 1; background: linear-gradient(135deg, #8b5cf6, #a855f7);
-  border: 0; padding: 9px 14px; border-radius: var(--radius-md);
-  font-size: 12.5px; font-weight: 900; color: #fff; cursor: pointer;
-  transition: all 0.2s ease;
+.widget-desc {
+  font-size: 13px; line-height: 1.55; color: var(--tx-muted); font-weight: 500;
 }
 
 .leaderboard-card {
@@ -858,22 +845,16 @@ function renderMain() {
         '</div>' +
 
         '<aside class="sidebar-panel">' +
-          '<div class="promo-banner-card">' +
-            '<div class="promo-brand-tag">' + icons.ticket + ' Campus Pass x Eventify</div>' +
-            '<div class="promo-title">FLAT 100% FREE</div>' +
-            '<div class="promo-code-pill">AUTO FIFO WAITLIST PROMOTION</div>' +
-            '<div class="promo-actions-row">' +
-              '<div class="code-chip">🎟️ 0 COST RSVP</div>' +
-              '<button class="promo-book-btn" onclick="toast(\'100% Free Campus Event Access Enabled\')">Learn More</button>' +
-            '</div>' +
-          '</div>' +
-
           '<div class="leaderboard-card">' +
             '<div class="leaderboard-header">' +
-              '<div class="leaderboard-title">' + icons.fire + ' Most Interested</div>' +
-              '<div class="timeframe-pill">This Week ▾</div>' +
+              '<div class="leaderboard-title">' + icons.fire + ' Trending on Campus</div>' +
+              '<div class="timeframe-pill">Top Ranked</div>' +
             '</div>' +
             '<div class="leaderboard-list" id="leaderboard-list"></div>' +
+          '</div>' +
+          '<div class="info-widget-card">' +
+            '<div class="widget-header">' + icons.ticket + ' Automatic FIFO Waitlist</div>' +
+            '<p class="widget-desc">When events reach capacity, students join a live FIFO queue. If a confirmed student cancels, the first student in the queue is automatically promoted to a confirmed seat.</p>' +
           '</div>' +
         '</aside>' +
       '</div>' +
