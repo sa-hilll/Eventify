@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Eventify — Campus Event Management & Pass Booking</title>
 <meta name="description" content="Discover, RSVP, waitlist, and manage college and campus events in high-contrast cinematic dark mode.">
+<link rel="icon" type="image/png" href="/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
@@ -732,7 +733,7 @@ function renderAuth() {
       '</div>' +
       '<div class="auth-form-side">' +
         '<div class="auth-brand-head">' +
-          '<span class="brand-icon" style="width:30px;height:30px;border-radius:8px">' + icons.logo + '</span> EVENTIFY' +
+          '<img src="/logo.png" alt="Eventify Logo" style="width:34px;height:34px;border-radius:9px;object-fit:cover;box-shadow:0 4px 15px rgba(139,92,246,0.45)"> EVENTIFY' +
         '</div>' +
         '<div class="auth-box">' +
           '<h1>' + (reg ? 'Create Account' : 'Welcome Back') + '</h1>' +
@@ -816,7 +817,7 @@ function renderMain() {
   $('#app').innerHTML =
     '<header class="top-nav">' +
       '<div class="brand-logo">' +
-        '<span class="brand-icon">' + icons.logo + '</span> EVENTIFY' +
+        '<img src="/logo.png" alt="Eventify Logo" style="width:36px;height:36px;border-radius:10px;object-fit:cover;box-shadow:0 4px 18px rgba(139,92,246,0.45)"> EVENTIFY' +
       '</div>' +
       '<div class="nav-center-menu">' +
         '<button class="nav-item ' + (activeNav === 'explore' ? 'active' : '') + '" onclick="setNav(\'explore\')">' + icons.compass + ' Explore</button>' +
